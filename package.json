@@ -1,0 +1,42 @@
+{
+  "name": "common-utils",
+  "version": "1.0.0",
+  "description": "Contains modules exposing utility functions.",
+  "main": "lib/utils.js",
+  "types": "lib/utils.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "envalid": "^7.3.1",
+    "mongoose": "^7.0.5",
+    "winston": "^3.9.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.1",
+    "jest": "^29.5.0",
+    "pretty-format": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "tsc-alias": "^1.8.5",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "test": "jest --config jest.config.js"
+  },
+  "keywords": [
+    "WeMineX"
+  ],
+  "author": "We Mine X Inc.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/We-Mine-X-Inc/common-utils/issues"
+  },
+  "homepage": "https://github.com/We-Mine-X-Inc/common-utils#readme"
+}
