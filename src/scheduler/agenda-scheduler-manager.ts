@@ -1,9 +1,9 @@
-import { Agenda, IAgendaConfig } from "@hokify/agenda";
+import { Agenda } from "@hokify/agenda";
 
 const schedulers: Agenda[] = [];
 
 export const agendaSchedulerManager = {
-  create: (options: IAgendaConfig): Agenda => {
+  create: (options: Object): Agenda => {
     const scheduler = new Agenda(options);
     schedulers.push(scheduler);
     return scheduler;
