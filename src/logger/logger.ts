@@ -6,6 +6,8 @@ import { LOG_DIR, NODE_ENV } from "@config";
 
 // logs dir
 const logDir: string = join(__dirname, LOG_DIR || "");
+console.log(__dirname);
+console.log(logDir);
 
 if (!existsSync(logDir)) {
   mkdirSync(logDir);
