@@ -1,4 +1,6 @@
 import winston from "winston";
-declare const logger: winston.Logger;
-export { logger };
+export declare function createLogger({ logDir, envName, }: {
+    logDir: string;
+    envName: string;
+}): winston.Logger;
 //# sourceMappingURL=logger.d.ts.map
