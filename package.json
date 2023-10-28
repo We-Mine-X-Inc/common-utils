@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hokify/agenda": "^6.3.0",
+    "apis": "github:We-Mine-X-Inc/APIs#main",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
     "envalid": "^7.3.1",
