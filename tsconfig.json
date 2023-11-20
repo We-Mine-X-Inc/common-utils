@@ -21,7 +21,11 @@
     "noEmit": false,
     "typeRoots": ["node_modules/@types"],
     "target": "es6",
-    "lib": ["es6", "esnext.asynciterable"],
+    "lib": [
+      "es6",
+      "esnext.asynciterable",
+      "DOM" // https://github.com/apollographql/apollo-client/issues/6376
+    ],
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,

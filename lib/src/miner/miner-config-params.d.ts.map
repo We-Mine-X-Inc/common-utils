@@ -1,0 +1,1 @@
+{"version":3,"file":"miner-config-params.d.ts","sourceRoot":"","sources":["../../../src/miner/miner-config-params.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,IAAI,EAAE,MAAM,MAAM,CAAC;AAEnC,MAAM,MAAM,iBAAiB,GAAG;IAC9B,KAAK,EAAE,KAAK,CAAC;IACb,IAAI,EAAE,IAAI,CAAC;CACZ,CAAC"}
