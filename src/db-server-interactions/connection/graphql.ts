@@ -12,10 +12,12 @@ type GraphQLConfig = {
   getAppAuthInfo: () => Promise<{ access_token: string }>;
 };
 
+export type GraphQLAccessors = {
+  [Property: string]: () => Promise<ApolloClient<NormalizedCacheObject>>;
+};
+
 export function constructGraphqlClients(clientConfigs: GraphQLConfig[]) {
-  const graphQLClients: {
-    [Property: string]: () => Promise<ApolloClient<NormalizedCacheObject>>;
-  } = {};
+  const graphQLClients: GraphQLAccessors = {};
 
   clientConfigs.forEach(({ appId, getAppAuthInfo }) => {
     graphQLClients[appId] = async () =>

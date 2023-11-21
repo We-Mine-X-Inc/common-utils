@@ -1,6 +1,6 @@
 import mongoose, { Connection } from "mongoose";
 
-type DatabaseConfigurations = {
+export type DatabaseConfigurations = {
   [Property: string]: () => Connection;
 };
 

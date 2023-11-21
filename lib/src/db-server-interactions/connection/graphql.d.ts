@@ -5,8 +5,9 @@ type GraphQLConfig = {
         access_token: string;
     }>;
 };
-export declare function constructGraphqlClients(clientConfigs: GraphQLConfig[]): {
+export type GraphQLAccessors = {
     [Property: string]: () => Promise<ApolloClient<NormalizedCacheObject>>;
 };
+export declare function constructGraphqlClients(clientConfigs: GraphQLConfig[]): GraphQLAccessors;
 export {};
 //# sourceMappingURL=graphql.d.ts.map
