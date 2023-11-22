@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
-import { getCustomerGraphSchemaName } from "../environment-tables";
+import { getCustomerGraphSchemaName } from "../../environment-tables";
 
 export function getCustomerById(env: Environment) {
   return gql`

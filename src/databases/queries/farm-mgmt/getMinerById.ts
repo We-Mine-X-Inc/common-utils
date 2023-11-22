@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
-import { getMinerGraphSchemaName } from "../environment-tables";
+import { getMinerGraphSchemaName } from "../../environment-tables";
 
 export function getMinerById(env: Environment) {
   return gql`
