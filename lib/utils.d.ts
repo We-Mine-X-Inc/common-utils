@@ -1,5 +1,6 @@
 export * from "./src/constants";
 export * from "./src/databases";
+export * from "./src/environment";
 export * from "./src/logger";
 export * from "./src/miner";
 export * from "./src/notifications";
