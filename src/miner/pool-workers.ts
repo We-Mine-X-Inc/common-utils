@@ -1,4 +1,4 @@
-import { PoolPurposeType } from "apis";
+import { PoolPurposeType } from "wemine-apis";
 import { MinerConfigParams } from "./miner-config-params";
 
 export const CLIENT_WORKER_PREFIX = "cl";

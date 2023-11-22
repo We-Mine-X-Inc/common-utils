@@ -1,4 +1,4 @@
-import { PoolType } from "apis";
+import { PoolType } from "wemine-apis";
 import { MinerConfigParams } from "./miner-config-params";
 import { getPoolWorker } from "./pool-workers";
 
