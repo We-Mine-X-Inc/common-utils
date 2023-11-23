@@ -1,27 +1,34 @@
 import { Environment } from "wemine-apis";
 
+getContractGraphSchemaName;
+
+export function getContractGraphSchemaName(env: Environment) {
+  return getTableGraphSchemaName({ tablePrefix: "contract", env });
+}
+
 export function getCustomerGraphSchemaName(env: Environment) {
-  switch (env) {
-    case Environment.TEST:
-      return "customerTest";
-    case Environment.DEV:
-      return "customerDev";
-    case Environment.PROD:
-      return "customerProd";
-    default:
-      return "customerDev";
-  }
+  return getTableGraphSchemaName({ tablePrefix: "customer", env });
 }
 
 export function getMinerGraphSchemaName(env: Environment) {
+  return getTableGraphSchemaName({ tablePrefix: "miner", env });
+}
+
+export function getTableGraphSchemaName({
+  tablePrefix,
+  env,
+}: {
+  tablePrefix: string;
+  env: Environment;
+}) {
   switch (env) {
     case Environment.TEST:
-      return "minerTest";
+      return `${tablePrefix}Test`;
     case Environment.DEV:
-      return "minerDev";
+      return `${tablePrefix}Dev`;
     case Environment.PROD:
-      return "minerProd";
+      return `${tablePrefix}Prod`;
     default:
-      return "minerDev";
+      return `${tablePrefix}Dev`;
   }
 }
