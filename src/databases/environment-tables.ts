@@ -14,7 +14,11 @@ export function getMinerGraphSchemaName(env: Environment) {
   return getTableGraphSchemaName({ tablePrefix: "miner", env });
 }
 
-export function getTableGraphSchemaName({
+export function getPoolGraphSchemaName(env: Environment) {
+  return getTableGraphSchemaName({ tablePrefix: "pool", env });
+}
+
+function getTableGraphSchemaName({
   tablePrefix,
   env,
 }: {

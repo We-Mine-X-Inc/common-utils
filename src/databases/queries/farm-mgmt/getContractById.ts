@@ -6,7 +6,7 @@ export function getContractById(env: Environment) {
   return gql`
   query GetContractById($contractId: String) {
     ${getContractGraphSchemaName(env)}(query: { _id: $contractId }) {
-      notificationPreferences
+      hostingContract
     }
   }
 `;
