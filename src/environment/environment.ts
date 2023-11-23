@@ -1,6 +1,6 @@
 import { Environment } from "wemine-apis";
 
-type EnvironmentString = "test" | "development" | "production";
+export type EnvironmentString = "test" | "development" | "production";
 export function convertStringToEnum(envString: EnvironmentString) {
   switch (envString) {
     case "test":
