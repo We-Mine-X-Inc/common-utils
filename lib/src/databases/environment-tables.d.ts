@@ -1,6 +1,12 @@
 import { Environment } from "wemine-apis";
-export declare function getContractGraphSchemaName(env: Environment): string;
-export declare function getCustomerGraphSchemaName(env: Environment): string;
-export declare function getMinerGraphSchemaName(env: Environment): string;
-export declare function getPoolGraphSchemaName(env: Environment): string;
+type SchemaOptions = {
+    forManyDocuments?: boolean;
+    embeddedInFunction?: boolean;
+};
+export declare function getContractGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getCustomerGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getMinerGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getPoolGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getMiningWorkGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export {};
 //# sourceMappingURL=environment-tables.d.ts.map

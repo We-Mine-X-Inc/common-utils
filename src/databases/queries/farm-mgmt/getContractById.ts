@@ -4,7 +4,7 @@ import { getContractGraphSchemaName } from "../../environment-tables";
 
 export function getContractById(env: Environment) {
   return gql`
-  query GetContractById($contractId: String) {
+  query GetContractById($contractId: ObjectId) {
     ${getContractGraphSchemaName(env)}(query: { _id: $contractId }) {
       hostingContract
     }

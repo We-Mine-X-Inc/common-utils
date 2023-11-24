@@ -4,7 +4,7 @@ import { getCustomerGraphSchemaName } from "../../environment-tables";
 
 export function getCustomerById(env: Environment) {
   return gql`
-  query GetCustomerById($customerId: String) {
+  query GetCustomerById($customerId: ObjectId) {
     ${getCustomerGraphSchemaName(env)}(query: { _id: $customerId }) {
       notificationPreferences
     }

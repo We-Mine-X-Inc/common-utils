@@ -1,38 +1,78 @@
 import { Environment } from "wemine-apis";
 
-getContractGraphSchemaName;
+type SchemaOptions = {
+  forManyDocuments?: boolean;
+  embeddedInFunction?: boolean;
+};
 
-export function getContractGraphSchemaName(env: Environment) {
-  return getTableGraphSchemaName({ tablePrefix: "contract", env });
+export function getContractGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tablePrefix: "contract",
+    env,
+    schemaOptions,
+  });
 }
 
-export function getCustomerGraphSchemaName(env: Environment) {
-  return getTableGraphSchemaName({ tablePrefix: "customer", env });
+export function getCustomerGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tablePrefix: "customer",
+    env,
+    schemaOptions,
+  });
 }
 
-export function getMinerGraphSchemaName(env: Environment) {
-  return getTableGraphSchemaName({ tablePrefix: "miner", env });
+export function getMinerGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({ tablePrefix: "miner", env, schemaOptions });
 }
 
-export function getPoolGraphSchemaName(env: Environment) {
-  return getTableGraphSchemaName({ tablePrefix: "pool", env });
+export function getPoolGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({ tablePrefix: "pool", env, schemaOptions });
+}
+
+export function getMiningWorkGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tablePrefix: "miningWork",
+    env,
+    schemaOptions,
+  });
 }
 
 function getTableGraphSchemaName({
   tablePrefix,
   env,
+  schemaOptions,
 }: {
   tablePrefix: string;
   env: Environment;
+  schemaOptions?: SchemaOptions | undefined;
 }) {
+  const prefix = schemaOptions?.embeddedInFunction
+    ? tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)
+    : tablePrefix;
+  const suffix = schemaOptions?.forManyDocuments ? "s" : "";
   switch (env) {
     case Environment.TEST:
-      return `${tablePrefix}Test`;
+      return `${prefix}Test${suffix}`;
     case Environment.DEV:
-      return `${tablePrefix}Dev`;
+      return `${prefix}Dev${suffix}`;
     case Environment.PROD:
-      return `${tablePrefix}Prod`;
+      return `${prefix}Prod${suffix}`;
     default:
-      return `${tablePrefix}Dev`;
+      return `${prefix}Dev${suffix}`;
   }
 }

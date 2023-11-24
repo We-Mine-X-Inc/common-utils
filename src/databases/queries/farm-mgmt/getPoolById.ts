@@ -4,7 +4,7 @@ import { getPoolGraphSchemaName } from "../../environment-tables";
 
 export function getPoolById(env: Environment) {
   return gql`
-  query GetPoolById($poolId: String) {
+  query GetPoolById($poolId: ObjectId) {
     ${getPoolGraphSchemaName(env)}(query: { _id: $poolId }) {
       
     }
