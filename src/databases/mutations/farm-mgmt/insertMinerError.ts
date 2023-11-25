@@ -4,7 +4,7 @@ import { MinerError } from "wemine-apis";
 export function insertMinerError(minerError: MinerError) {
   const newMinerError = { ...minerError, _id: undefined };
   return gql`
-  mutation InsertOneMiningWork {
+  mutation InsertOneMinerError {
     insertOneMinererror(
       data: ${{ ...newMinerError }}) {
         _id
