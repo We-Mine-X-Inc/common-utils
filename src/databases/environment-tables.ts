@@ -46,7 +46,7 @@ export function getMiningWorkGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "miningWork",
+    tablePrefix: "miningwork",
     env,
     schemaOptions,
   });

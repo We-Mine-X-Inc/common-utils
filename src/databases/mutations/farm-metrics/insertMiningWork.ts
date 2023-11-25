@@ -1,23 +1,16 @@
 import { gql } from "@apollo/client";
+import { Environment, MiningWork } from "wemine-apis";
+import { getMiningWorkGraphSchemaName } from "../../environment-tables";
 
-export const insertMiningWork = gql`
-  query InsertMiningWork(
-    $hashrate: Int
-    $isOnline: Boolean
-    $friendlyMinerId: String
-    $friendlyPoolId: String
-    $timeISOString: DateTime
-    $totalEnergyConsumption: Int
-  ) {
-    mutation(
-      data: {
-        hashRate: $hashrate
-        isOnline: $isOnline
-        minerByFriendlyId: { link: $friendlyMinerId }
-        poolByFriendlyId: { link: $friendlyPoolId }
-        time: $timeISOString
-        totalEnergyConsumption: $totalEnergyConsumption
-      }
-    )
-  }
-`;
+export function insertMiningWork(env: Environment, miningWork: MiningWork) {
+  const newMiningWork = { ...miningWork, _id: undefined };
+  return gql`
+  mutation InsertOneMiningWork {
+    insertOne${getMiningWorkGraphSchemaName(env, {
+      embeddedInFunction: true,
+    })}(
+      data: ${{ ...newMiningWork }}) {
+        _id
+    }
+  }`;
+}
