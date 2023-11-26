@@ -1,1 +1,1 @@
-{"version":3,"file":"insertMiningWork.d.ts","sourceRoot":"","sources":["../../../../../src/databases/mutations/farm-metrics/insertMiningWork.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,WAAW,EAAE,UAAU,EAAE,MAAM,aAAa,CAAC;AAGtD,wBAAgB,gBAAgB,CAAC,GAAG,EAAE,WAAW,EAAE,UAAU,EAAE,UAAU,yCAWxE"}
+{"version":3,"file":"insertMiningWork.d.ts","sourceRoot":"","sources":["../../../../../src/databases/mutations/farm-metrics/insertMiningWork.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,WAAW,EAAE,MAAM,aAAa,CAAC;AAG1C,wBAAgB,gBAAgB,CAAC,GAAG,EAAE,WAAW,yCAwBhD"}

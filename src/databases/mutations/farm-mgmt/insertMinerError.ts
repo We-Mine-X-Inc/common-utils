@@ -1,12 +1,20 @@
 import { gql } from "@apollo/client";
-import { MinerError } from "wemine-apis";
 
-export function insertMinerError(minerError: MinerError) {
-  const newMinerError = { ...minerError, _id: undefined };
+export function insertMinerError() {
   return gql`
-  mutation InsertOneMinerError {
+  mutation InsertOneMinerError(
+    type: Int
+    $environmentConfigId: ObjectId
+    $poolSwitchErrorInfo: PoolSwitchErrorInfo
+    $stackTrace: String
+  ) {
     insertOneMinererror(
-      data: ${{ ...newMinerError }}) {
+      data: {
+        type: $type
+        environmentConfigId: $environmentConfigId
+        poolSwitchErrorInfo: $poolSwitchErrorInfo
+        stackTrace: $stackTrace
+      }) {
         _id
         stackTrace
     }
