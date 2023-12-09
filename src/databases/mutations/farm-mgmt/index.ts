@@ -1,2 +1,2 @@
 export * from "./insertMinerError";
-export * from "./updateMinerById";
+export * from "./updateHostedMinerById";

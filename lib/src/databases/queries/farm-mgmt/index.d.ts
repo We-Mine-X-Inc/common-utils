@@ -1,6 +1,6 @@
-export * from "./getAllFriendlyMinerIds";
+export * from "./getAllHostedMiners";
 export * from "./getContractById";
 export * from "./getCustomerById";
-export * from "./getMinerById";
+export * from "./getHostedMinerById";
 export * from "./getPoolById";
 //# sourceMappingURL=index.d.ts.map

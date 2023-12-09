@@ -1,3 +1,3 @@
 export * from "./insertMinerError";
-export * from "./updateMinerById";
+export * from "./updateHostedMinerById";
 //# sourceMappingURL=index.d.ts.map

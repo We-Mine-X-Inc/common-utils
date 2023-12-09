@@ -27,7 +27,7 @@ export function getCustomerGraphSchemaName(
   });
 }
 
-export function getMinerGraphSchemaName(
+export function getHostedMinerGraphSchemaName(
   env: Environment,
   schemaOptions?: SchemaOptions
 ) {
