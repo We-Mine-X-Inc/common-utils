@@ -10,7 +10,8 @@ export const COMPANY_FULL_TIME_WORKER_PREFIX = "co";
 export function getPoolWorker(switchPoolInfo: MinerConfigParams) {
   const purpose = switchPoolInfo.pool.purpose;
   const friendlyMinerId = switchPoolInfo.miner.friendlyMinerId;
-  return `${getPoolWorkerPrefix(purpose)}_${friendlyMinerId}`;
+  const friendlyPoolId = switchPoolInfo.pool.friendlyPoolId;
+  return `${getPoolWorkerPrefix(purpose)}_${friendlyPoolId}_${friendlyMinerId}`;
 }
 
 function getPoolWorkerPrefix(purpose: PoolPurposeType) {
