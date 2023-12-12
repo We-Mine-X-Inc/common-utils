@@ -1,3 +1,4 @@
 import { Environment } from "wemine-apis";
-export declare function getHostedMinerById(env: Environment): import("@apollo/client").DocumentNode;
+import { IdQuery } from "../id-query";
+export declare function getHostedMinerByIdQuery(env: Environment, query: IdQuery): import("graphql/language/ast").DocumentNode;
 //# sourceMappingURL=getHostedMinerById.d.ts.map
