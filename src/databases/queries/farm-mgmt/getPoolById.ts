@@ -1,11 +1,18 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getPoolGraphSchemaName } from "../../environment-tables";
+import { IdQuery } from "../id-query";
 
-export function getPoolById(env: Environment) {
+export function getPoolById({
+  env,
+  query,
+}: {
+  env: Environment;
+  query: IdQuery;
+}) {
   return gql`
-  query GetPoolById($poolId: ObjectId) {
-    ${getPoolGraphSchemaName(env)}(query: { _id: $poolId }) {
+  query {
+    ${getPoolGraphSchemaName(env)}(query: ${query}) {
       
     }
   }

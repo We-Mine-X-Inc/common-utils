@@ -1,3 +1,7 @@
 import { Environment } from "wemine-apis";
-export declare function getContractById(env: Environment): import("@apollo/client").DocumentNode;
+import { IdQuery } from "../id-query";
+export declare function getContractById({ env, query, }: {
+    env: Environment;
+    query: IdQuery;
+}): import("@apollo/client").DocumentNode;
 //# sourceMappingURL=getContractById.d.ts.map
