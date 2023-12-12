@@ -1,0 +1,1 @@
+{"version":3,"file":"getContracts.d.ts","sourceRoot":"","sources":["../../../../../src/databases/queries/farm-mgmt/getContracts.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,WAAW,EAAE,MAAM,aAAa,CAAC;AAG1C,wBAAgB,YAAY,CAAC,EAC3B,GAAG,EACH,KAAK,GACN,EAAE;IACD,GAAG,EAAE,WAAW,CAAC;IACjB,KAAK,EAAE,IAAI,CAAC,GAAG,EAAE,KAAK,CAAC,CAAC;CACzB,yCAYA"}
