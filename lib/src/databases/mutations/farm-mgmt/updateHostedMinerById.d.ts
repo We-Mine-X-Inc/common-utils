@@ -1,3 +1,8 @@
 import { Environment, Miner } from "wemine-apis";
-export declare function updateHostedMinerById(env: Environment, updatedProperties: Miner): import("@apollo/client").DocumentNode;
+import { IdQuery } from "../../queries/id-query";
+export declare function updateHostedMinerById({ env, query, updatedProperties, }: {
+    env: Environment;
+    query: IdQuery;
+    updatedProperties: Miner;
+}): import("@apollo/client").DocumentNode;
 //# sourceMappingURL=updateHostedMinerById.d.ts.map
