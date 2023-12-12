@@ -1,1 +1,1 @@
-{"version":3,"file":"insertMinerError.js","sourceRoot":"","sources":["../../../../../src/databases/mutations/farm-mgmt/insertMinerError.ts"],"names":[],"mappings":";;;AAAA,2CAAqC;AAErC,SAAgB,gBAAgB;IAC9B,OAAO,IAAA,YAAG,EAAA;;;;;;;;;;;;;;;;;IAiBR,CAAC;AACL,CAAC;AAnBD,4CAmBC"}
+{"version":3,"file":"insertMinerError.js","sourceRoot":"","sources":["../../../../../src/databases/mutations/farm-mgmt/insertMinerError.ts"],"names":[],"mappings":";;;AAAA,2CAAqC;AAErC,SAAgB,gBAAgB,CAAC,EAAE,IAAI,EAAiB;IACtD,OAAO,IAAA,YAAG,EAAA;;kCAEsB,IAAI;;;;;GAKnC,CAAC;AACJ,CAAC;AATD,4CASC"}

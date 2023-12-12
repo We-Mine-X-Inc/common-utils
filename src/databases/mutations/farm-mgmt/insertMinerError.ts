@@ -1,22 +1,12 @@
 import { gql } from "@apollo/client";
 
-export function insertMinerError() {
+export function insertMinerError({ data }: { data: any }) {
   return gql`
-  mutation InsertOneMinerError(
-    type: Int
-    $environmentConfigId: ObjectId
-    $poolSwitchErrorInfo: PoolSwitchErrorInfo
-    $stackTrace: String
-  ) {
-    insertOneMinererror(
-      data: {
-        type: $type
-        environmentConfigId: $environmentConfigId
-        poolSwitchErrorInfo: $poolSwitchErrorInfo
-        stackTrace: $stackTrace
-      }) {
+    mutation {
+      insertOneMinererror(data: ${data}) {
         _id
         stackTrace
+      }
     }
-  }`;
+  `;
 }

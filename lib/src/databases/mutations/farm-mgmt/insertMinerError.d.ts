@@ -1,2 +1,4 @@
-export declare function insertMinerError(): import("@apollo/client").DocumentNode;
+export declare function insertMinerError({ data }: {
+    data: any;
+}): import("@apollo/client").DocumentNode;
 //# sourceMappingURL=insertMinerError.d.ts.map
