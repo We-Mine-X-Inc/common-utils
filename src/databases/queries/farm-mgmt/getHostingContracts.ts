@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getHostingContractGraphSchemaName } from "../../environment-tables";
 
-export function getContracts({
+export function getHostingContracts({
   env,
   query,
 }: {
