@@ -4,7 +4,7 @@ import { Environment } from "wemine-apis";
 
 const MAX_NUM_OF_MINER_IDS = 600;
 
-export function getAllHostedMiners({
+export function getHostedMiners({
   env,
   query,
 }: {
