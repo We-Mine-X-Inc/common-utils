@@ -31,7 +31,11 @@ export function getHostedMinerGraphSchemaName(
   env: Environment,
   schemaOptions?: SchemaOptions
 ) {
-  return getTableGraphSchemaName({ tablePrefix: "miner", env, schemaOptions });
+  return getTableGraphSchemaName({
+    tablePrefix: "hostedminer",
+    env,
+    schemaOptions,
+  });
 }
 
 export function getPoolGraphSchemaName(
