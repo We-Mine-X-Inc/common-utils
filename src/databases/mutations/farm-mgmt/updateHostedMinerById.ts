@@ -1,16 +1,21 @@
 import { gql } from "@apollo/client";
 import { Environment, Miner } from "wemine-apis";
 import { getHostedMinerGraphSchemaName } from "../../environment-tables";
+import { IdQuery } from "../../queries/id-query";
 
-export function updateHostedMinerById(
-  env: Environment,
-  updatedProperties: Miner
-) {
+export function updateHostedMinerById({
+  env,
+  query,
+  updatedProperties,
+}: {
+  env: Environment;
+  query: IdQuery;
+  updatedProperties: Miner;
+}) {
   return gql`
-  mutation UpdateHostedMinerById($minerId: ObjectId) {
     updateOne${getHostedMinerGraphSchemaName(env, {
       embeddedInFunction: true,
-    })}(query: {_id: $minerId}, set: ${updatedProperties}) {
+    })}(query: ${query}, set: ${updatedProperties}) {
       API
       _id
       friendlyMinerId
@@ -24,6 +29,5 @@ export function updateHostedMinerById(
         poolIsBeingSwitched
       }
     }
-  }
 `;
 }
