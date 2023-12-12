@@ -4,10 +4,7 @@ import { Environment } from "wemine-apis";
 
 const MAX_NUM_OF_MINER_IDS = 600;
 
-export function getAllHostedMinersQuery(
-  env: Environment,
-  query: Omit<any, "_id">
-) {
+export function getAllHostedMiners(env: Environment, query: Omit<any, "_id">) {
   return gql`
   query {
     ${getHostedMinerGraphSchemaName(env, {

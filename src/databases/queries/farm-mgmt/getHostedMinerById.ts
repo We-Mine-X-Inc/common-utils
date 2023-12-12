@@ -5,7 +5,7 @@ import { IdQuery } from "../id-query";
 
 const MAX_NUM_OF_MINER_IDS = 600;
 
-export function getHostedMinerByIdQuery(env: Environment, query: IdQuery) {
+export function getHostedMinerById(env: Environment, query: IdQuery) {
   return gql`
   query {
     ${getHostedMinerGraphSchemaName(
