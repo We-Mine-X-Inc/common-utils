@@ -40,7 +40,7 @@ async function getGraphQLClient(config: GraphQLConfig) {
 
 function getHttpLink(appId: string) {
   return new HttpLink({
-    uri: `https://realm.mongodb.com/api/client/v2.0/app/${appId}/graphql`,
+    uri: `https://us-east-1.aws.realm.mongodb.com/api/client/v2.0/app/${appId}/graphql`,
   });
 }
 
