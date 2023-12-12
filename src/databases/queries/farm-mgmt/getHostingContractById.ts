@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
-import { getContractGraphSchemaName } from "../../environment-tables";
+import { getHostingContractGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../id-query";
 
 export function getContractById({
@@ -12,7 +12,7 @@ export function getContractById({
 }) {
   return gql`
   query {
-    ${getContractGraphSchemaName(env)}(query: ${query}) {
+    ${getHostingContractGraphSchemaName(env)}(query: ${query}) {
       hostingContract
     }
   }

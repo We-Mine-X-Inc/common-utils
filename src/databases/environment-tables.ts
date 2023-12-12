@@ -5,12 +5,12 @@ type SchemaOptions = {
   embeddedInFunction?: boolean;
 };
 
-export function getContractGraphSchemaName(
+export function getHostingContractGraphSchemaName(
   env: Environment,
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "contract",
+    tablePrefix: "hostingcontract",
     env,
     schemaOptions,
   });

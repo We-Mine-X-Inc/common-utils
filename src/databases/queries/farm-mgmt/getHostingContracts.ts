@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
-import { getContractGraphSchemaName } from "../../environment-tables";
+import { getHostingContractGraphSchemaName } from "../../environment-tables";
 
 export function getContracts({
   env,
@@ -11,7 +11,7 @@ export function getContracts({
 }) {
   return gql`
   query {
-    ${getContractGraphSchemaName(env, {
+    ${getHostingContractGraphSchemaName(env, {
       forManyDocuments: true,
     })}(query: ${query}) {
         minerIntakeStage
