@@ -1,1 +1,1 @@
-export type UpdateDataObj = Omit<any, "_id">;
+export type UpdateDataObject = Omit<any, "_id">;

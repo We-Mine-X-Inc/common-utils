@@ -1,7 +1,7 @@
 import { Environment } from "wemine-apis";
-import { UpdateDataObj } from "../update-data-obj";
+import { UpdateDataObject as UpdateDataObject } from "../update-data-obj";
 export declare function insertMiningWork({ env, data, }: {
     env: Environment;
-    data: UpdateDataObj;
+    data: UpdateDataObject;
 }): import("@apollo/client").DocumentNode;
 //# sourceMappingURL=insertMiningWork.d.ts.map

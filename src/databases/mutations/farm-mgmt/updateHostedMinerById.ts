@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getHostedMinerGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../../queries/id-query";
-import { UpdateDataObj } from "../update-data-obj";
+import { UpdateDataObject } from "../update-data-obj";
 
 export function updateHostedMinerById({
   env,
@@ -11,7 +11,7 @@ export function updateHostedMinerById({
 }: {
   env: Environment;
   query: IdQuery;
-  updatedProperties: UpdateDataObj;
+  updatedProperties: UpdateDataObject;
 }) {
   return gql`
     updateOne${getHostedMinerGraphSchemaName(env, {

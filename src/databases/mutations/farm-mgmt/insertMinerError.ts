@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
-import { UpdateDataObj } from "../update-data-obj";
+import { UpdateDataObject } from "../update-data-obj";
 
-export function insertMinerError({ data }: { data: UpdateDataObj }) {
+export function insertMinerError({ data }: { data: UpdateDataObject }) {
   return gql`
     mutation {
       insertOneMinererror(data: ${data}) {

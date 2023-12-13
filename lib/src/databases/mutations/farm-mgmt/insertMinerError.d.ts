@@ -1,5 +1,5 @@
-import { UpdateDataObj } from "../update-data-obj";
+import { UpdateDataObject } from "../update-data-obj";
 export declare function insertMinerError({ data }: {
-    data: UpdateDataObj;
+    data: UpdateDataObject;
 }): import("@apollo/client").DocumentNode;
 //# sourceMappingURL=insertMinerError.d.ts.map
