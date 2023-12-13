@@ -14,6 +14,7 @@ export function updateHostedMinerById({
   updatedProperties: UpdateDataObject;
 }) {
   return gql`
+  mutation {
     updateOne${getHostedMinerGraphSchemaName(env, {
       embeddedInFunction: true,
     })}(query: ${query}, set: ${updatedProperties}) {
@@ -30,5 +31,6 @@ export function updateHostedMinerById({
         poolIsBeingSwitched
       }
     }
+  }
 `;
 }
