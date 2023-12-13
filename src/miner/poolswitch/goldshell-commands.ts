@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
 import { format as prettyFormat } from "pretty-format";
-import { HostedMiner, Pool } from "wemine-apis";
+import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 import {
   isFanSpeedWithinBounds,
   isHashRateWithinBounds,
@@ -10,8 +10,12 @@ import {
 import { assertMiner } from "wemine-apis";
 import {
   MINER_FAN_SPEED_FAILURE_PREFIX,
+  MINER_FAN_SPEED_HEALTHY_MSG,
   MINER_HASHRATE_FAILURE_PREFIX,
+  MINER_HASHRATE_HEALTHY_MSG,
   MINER_TEMPERATURE_FAILURE_PREFIX,
+  MINER_TEMPERATURE_HEALTHY_MSG,
+  POOL_STATUS_HEALTHY_MSG,
   POOL_SWITCHING_FAILURE_PREFIX,
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
@@ -199,7 +203,10 @@ export async function verifyGoldshellPool(
         Error msg: ${e}.
         Will reboot the miner and try again.`;
 
-      return Promise.reject(error);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+        stackTrace: error,
+      });
     });
 }
 
@@ -219,9 +226,14 @@ function verifyLivePoolStatus(verifyPoolParams: VerifyOperationsParams) {
           currentPoolInfo["pool-priority"] == 0
         )
       ) {
-        throw Error(`Goldshell miner pool update has not taken effect.
-        Please check miner: ${prettyFormat(verifyPoolParams)}`);
+        return Promise.reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: Error(`Goldshell miner pool update has not taken effect.
+        Please check miner: ${prettyFormat(verifyPoolParams)}`),
+        });
       }
+
+      return POOL_STATUS_HEALTHY_MSG;
     });
   };
 }
@@ -253,13 +265,18 @@ export async function verifyGoldshellHashRate(hostedMiner: HostedMiner) {
 
       const expectedHashRateRange = miner.metadata?.expectedHashRateRange;
 
-      throw Error(`${MINER_HASHRATE_FAILURE_PREFIX} 
-      HashRate not within the expected bounds: 
-        miner --> ${hostedMiner}
-        expectedHashRate --> ${expectedHashRateRange}
-        actualHashRate -> ${actualHashRate}.
-        Please check miner: ${prettyFormat(ipAddress)}`);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+        stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX} 
+          HashRate not within the expected bounds: 
+            miner --> ${hostedMiner}
+            expectedHashRate --> ${expectedHashRateRange}
+            actualHashRate -> ${actualHashRate}.
+            Please check miner: ${prettyFormat(ipAddress)}`),
+      });
     }
+
+    return MINER_HASHRATE_HEALTHY_MSG;
   });
 }
 
@@ -283,12 +300,17 @@ export async function verifyGoldshellFanSpeed(hostedMiner: HostedMiner) {
     });
 
     if (malfunctioningFans.length > 0) {
-      throw Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
-      Fan speeds are concerning and not within the expected bounds: 
-        expectedTemperature within miner - ${hostedMiner}
-        malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
+        stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+          Fan speeds are concerning and not within the expected bounds: 
+            expectedTemperature within miner - ${hostedMiner}
+            malfunctioning fan speeds: ${malfunctioningFans}. 
+            Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+
+    return MINER_FAN_SPEED_HEALTHY_MSG;
   });
 }
 
@@ -311,12 +333,17 @@ export async function verifyGoldshellTemperature(hostedMiner: HostedMiner) {
       });
     });
     if (tempMalfunctioningChips.length > 0) {
-      throw Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
-      Temperatures are concerning and not within the expected bounds: 
-        expectedTemperature within miner - ${hostedMiner}
-        malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+        stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+          Temperatures are concerning and not within the expected bounds: 
+            expectedTemperature within miner - ${hostedMiner}
+            malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
+            Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+
+    return MINER_TEMPERATURE_HEALTHY_MSG;
   });
 }
 

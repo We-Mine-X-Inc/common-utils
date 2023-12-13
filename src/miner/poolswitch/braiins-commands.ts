@@ -1,5 +1,5 @@
 import axios from "axios";
-import { HostedMiner } from "wemine-apis";
+import { HostedMiner, MinerErrorType } from "wemine-apis";
 import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
 import {
   isFanSpeedWithinBounds,
@@ -8,8 +8,12 @@ import {
 } from "./common-funcs";
 import {
   MINER_FAN_SPEED_FAILURE_PREFIX,
+  MINER_FAN_SPEED_HEALTHY_MSG,
   MINER_HASHRATE_FAILURE_PREFIX,
+  MINER_HASHRATE_HEALTHY_MSG,
   MINER_TEMPERATURE_FAILURE_PREFIX,
+  MINER_TEMPERATURE_HEALTHY_MSG,
+  POOL_STATUS_HEALTHY_MSG,
   POOL_SWITCHING_FAILURE_PREFIX,
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
@@ -41,14 +45,18 @@ export async function verifyBraiinsHashRate(hostedMiner: HostedMiner) {
         })
       )
     ) {
-      throw Error(`${MINER_HASHRATE_FAILURE_PREFIX}
+      return Promise.reject({
+        minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+        stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
         HashRate not within the expected bounds: 
           expectedHashRate within miner - ${hostedMiner}
           MHS 5s actualHashRate - ${hashRate5Secs}
           MHS 15m actualHashRate - ${hashRate15Mins}
           MHS avg actualHashRate - ${hashRateAvg}.
-          Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+          Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+    return MINER_HASHRATE_HEALTHY_MSG;
   });
 }
 
@@ -64,12 +72,16 @@ export async function verifyBraiinsFanSpeed(hostedMiner: HostedMiner) {
       });
     });
     if (malfunctioningFans.length > 0) {
-      throw Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+      return Promise.reject({
+        minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
+        stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
       Fan speeds are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+    return MINER_FAN_SPEED_HEALTHY_MSG;
   });
 }
 
@@ -85,12 +97,16 @@ export async function verifyBraiinsTemperature(hostedMiner: HostedMiner) {
       });
     });
     if (tempMalfunctioningChips.length > 0) {
-      throw Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+      return Promise.reject({
+        minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
+        stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+    return MINER_TEMPERATURE_HEALTHY_MSG;
   });
 }
 
@@ -99,25 +115,31 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
   const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
   exec(getPoolsCommand, (error: any, stdout: any, stderr: any) => {
     if (error) {
-      throw Error(`${POOL_VERIFICATION_FAILURE_PREFIX}
-      Failed to verify the mining pool for Braiins.
-      
-      Error msg: ${error}.
-      Will reboot the miner and try again.`);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+        stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX}
+          Failed to verify the mining pool for Braiins.
+          
+          Error msg: ${error}.
+          Will reboot the miner and try again.`),
+      });
     }
 
     const poolConfiguration = JSON.parse(stdout)["POOLS"][0];
     const currPoolUser = poolConfiguration["User"];
     const currPoolStatus = poolConfiguration["Status"];
     if (currPoolUser == params.pool.username && currPoolStatus == "Alive") {
-      return "Valid Pool Configuration";
+      return POOL_STATUS_HEALTHY_MSG;
     }
 
-    throw Error(`${POOL_VERIFICATION_FAILURE_PREFIX} 
-    Failed to verify the mining pool for Braiins.
-    Expected: ${{ username: params.pool.username, status: "Alive" }}.
-    Active Config: ${{ username: currPoolUser, status: currPoolStatus }}
-    Will reboot the miner and try again.`);
+    return Promise.reject({
+      minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+      stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX} 
+        Failed to verify the mining pool for Braiins.
+        Expected: ${{ username: params.pool.username, status: "Alive" }}.
+        Active Config: ${{ username: currPoolUser, status: currPoolStatus }}
+        Will reboot the miner and try again.`),
+    });
   });
 }
 

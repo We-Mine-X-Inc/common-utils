@@ -1,7 +1,7 @@
 import AxiosDigestAuth from "@mhoc/axios-digest-auth";
 import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
 import { format as prettyFormat } from "pretty-format";
-import { HostedMiner, Pool } from "wemine-apis";
+import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 
 import {
   isFanSpeedWithinBounds,
@@ -11,8 +11,12 @@ import {
 } from "./common-funcs";
 import {
   MINER_FAN_SPEED_FAILURE_PREFIX,
+  MINER_FAN_SPEED_HEALTHY_MSG,
   MINER_HASHRATE_FAILURE_PREFIX,
+  MINER_HASHRATE_HEALTHY_MSG,
   MINER_TEMPERATURE_FAILURE_PREFIX,
+  MINER_TEMPERATURE_HEALTHY_MSG,
+  POOL_STATUS_HEALTHY_MSG,
   POOL_SWITCHING_FAILURE_PREFIX,
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
@@ -196,6 +200,7 @@ export async function verifyAntminerPool(
     .then(getMinerConfig(params))
     .then(verifyLivePoolStatus(params))
     .then(() => verifyAntminerHashRate(params.hostedMiner))
+    .then(() => POOL_STATUS_HEALTHY_MSG)
     .catch((e) => {
       const error = `${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for an Antminer: ${prettyFormat(
@@ -204,7 +209,10 @@ export async function verifyAntminerPool(
         Error msg: ${e}.
         Will reboot the miner and try again.`;
 
-      return Promise.reject(error);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+        stackTrace: error,
+      });
     });
 }
 
@@ -231,14 +239,19 @@ export async function verifyAntminerHashRate(hostedMiner: HostedMiner) {
         })
       )
     ) {
-      throw Error(`${MINER_HASHRATE_FAILURE_PREFIX}
+      return Promise.reject({
+        minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+        stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
       HashRate not within the expected bounds: 
         expectedHashRate within miner - ${hostedMiner}
         rate_5s actualHashRate - ${minerStats["rate_5s"]}
         rate_30m actualHashRate - ${minerStats["rate_30m"]}
         rate_avg actualHashRate - ${minerStats["rate_avg"]}.
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+
+    return MINER_HASHRATE_HEALTHY_MSG;
   });
 }
 
@@ -256,12 +269,17 @@ export async function verifyAntminerFanSpeed(hostedMiner: HostedMiner) {
       });
     });
     if (malfunctioningFans.length > 0) {
-      throw Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+      return Promise.reject({
+        minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
+        stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
       Fan speeds are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+
+    return MINER_FAN_SPEED_HEALTHY_MSG;
   });
 }
 
@@ -294,11 +312,16 @@ export async function verifyAntminerTemperature(hostedMiner: HostedMiner) {
       );
     });
     if (tempMalfunctioningChips.length > 0) {
-      throw Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+      return Promise.reject({
+        minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
+        stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`);
+        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+      });
     }
+
+    return MINER_TEMPERATURE_HEALTHY_MSG;
   });
 }
