@@ -1,14 +1,14 @@
 import { PoolType } from "wemine-apis";
-import { MinerConfigParams } from "./miner-config-params";
+import { HostedMinerConfigParams } from "./miner-config-params";
 import { getPoolWorker } from "./pool-workers";
 
-export function constructPoolUser(params: MinerConfigParams) {
+export function constructPoolUser(params: HostedMinerConfigParams) {
   return `${params.pool.username}${getPoolPaymentMethod(
     params
   )}.${getPoolWorker(params)}`;
 }
 
-function getPoolPaymentMethod(switchPoolInfo: MinerConfigParams) {
+function getPoolPaymentMethod(switchPoolInfo: HostedMinerConfigParams) {
   switch (switchPoolInfo.pool.poolType) {
     case PoolType.POOL_MARS:
       return "+pps";

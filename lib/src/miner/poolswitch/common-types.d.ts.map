@@ -1,0 +1,1 @@
+{"version":3,"file":"common-types.d.ts","sourceRoot":"","sources":["../../../../src/miner/poolswitch/common-types.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,IAAI,EAAE,MAAM,aAAa,CAAC;AAEhD,MAAM,MAAM,gBAAgB,GAAG;IAC7B,WAAW,EAAE,WAAW,CAAC;IACzB,IAAI,EAAE,IAAI,CAAC;CACZ,CAAC;AAEF,MAAM,MAAM,sBAAsB,GAAG;IACnC,WAAW,EAAE,WAAW,CAAC;IACzB,IAAI,EAAE,IAAI,CAAC;CACZ,CAAC"}

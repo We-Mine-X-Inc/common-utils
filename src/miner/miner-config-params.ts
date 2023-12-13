@@ -1,6 +1,6 @@
-import { Miner, Pool } from "wemine-apis";
+import { HostedMiner, Pool } from "wemine-apis";
 
-export type MinerConfigParams = {
-  miner: Miner;
+export type HostedMinerConfigParams = {
+  hostedMiner: HostedMiner;
   pool: Pool;
 };

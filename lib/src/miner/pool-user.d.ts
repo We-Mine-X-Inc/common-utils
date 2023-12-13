@@ -1,3 +1,3 @@
-import { MinerConfigParams } from "./miner-config-params";
-export declare function constructPoolUser(params: MinerConfigParams): string;
+import { HostedMinerConfigParams } from "./miner-config-params";
+export declare function constructPoolUser(params: HostedMinerConfigParams): string;
 //# sourceMappingURL=pool-user.d.ts.map

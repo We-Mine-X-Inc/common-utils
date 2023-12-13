@@ -1,5 +1,5 @@
 import { PoolPurposeType } from "wemine-apis";
-import { MinerConfigParams } from "./miner-config-params";
+import { HostedMinerConfigParams } from "./miner-config-params";
 
 export const CLIENT_WORKER_PREFIX = "cl";
 
@@ -7,9 +7,9 @@ export const COMPANY_FEE_WORKER_PREFIX = "co_fee";
 
 export const COMPANY_FULL_TIME_WORKER_PREFIX = "co";
 
-export function getPoolWorker(switchPoolInfo: MinerConfigParams) {
+export function getPoolWorker(switchPoolInfo: HostedMinerConfigParams) {
   const purpose = switchPoolInfo.pool.purpose;
-  const friendlyMinerId = switchPoolInfo.miner.friendlyMinerId;
+  const friendlyMinerId = switchPoolInfo.hostedMiner.friendlyMinerId;
   const friendlyPoolId = switchPoolInfo.pool.friendlyPoolId;
   return `${getPoolWorkerPrefix(purpose)}_${friendlyPoolId}_${friendlyMinerId}`;
 }
