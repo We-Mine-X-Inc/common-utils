@@ -14,7 +14,7 @@ export function insertMiningWork({
   mutation {
     insertOne${getMiningWorkGraphSchemaName(env, {
       embeddedInFunction: true,
-    })}(data: ${data}) {
+    })}(data: ${JSON.stringify(data)}) {
         _id
     }
   }`;

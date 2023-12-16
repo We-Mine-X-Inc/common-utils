@@ -17,7 +17,9 @@ export function updateHostedMinerById({
   mutation {
     updateOne${getHostedMinerGraphSchemaName(env, {
       embeddedInFunction: true,
-    })}(query: ${query}, set: ${updatedProperties}) {
+    })}(query: ${JSON.stringify(query)}, set: ${JSON.stringify(
+    updatedProperties
+  )}) {
       API
       _id
       friendlyMinerId

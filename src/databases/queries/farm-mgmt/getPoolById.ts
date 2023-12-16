@@ -12,7 +12,7 @@ export function getPoolById({
 }) {
   return gql`
   query {
-    ${getPoolGraphSchemaName(env)}(query: ${query}) {
+    ${getPoolGraphSchemaName(env)}(query: ${JSON.stringify(query)}) {
       
     }
   }

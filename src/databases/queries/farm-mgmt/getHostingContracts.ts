@@ -13,7 +13,7 @@ export function getHostingContracts({
   query {
     ${getHostingContractGraphSchemaName(env, {
       forManyDocuments: true,
-    })}(query: ${query}) {
+    })}(query: ${JSON.stringify(query)}) {
         minerIntakeStage
         hostingContract
         poolActivity

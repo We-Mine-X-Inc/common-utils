@@ -16,7 +16,9 @@ export function getMiningWorkByTimeSpanQuery({
   query {
   ${getMiningWorkGraphSchemaName(env, {
     forManyDocuments: true,
-  })}(query: ${query}, limit: ${MIN_LIMIT_OF_WORK_RECORDS}, sortBy: TIME_ASC) {
+  })}(query: ${JSON.stringify(
+    query
+  )}, limit: ${MIN_LIMIT_OF_WORK_RECORDS}, sortBy: TIME_ASC) {
         hashRate
 		    minerByFriendlyId {
           _id

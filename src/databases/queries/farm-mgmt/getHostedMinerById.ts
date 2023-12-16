@@ -14,9 +14,9 @@ export function getHostedMinerById({
 }) {
   return gql`
   query {
-    ${getHostedMinerGraphSchemaName(
-      env
-    )}(query: ${query}, limit: ${MAX_NUM_OF_MINER_IDS}) {
+    ${getHostedMinerGraphSchemaName(env)}(query: ${JSON.stringify(
+    query
+  )}, limit: ${MAX_NUM_OF_MINER_IDS}) {
         API
         ipAddress
         friendlyMinerId

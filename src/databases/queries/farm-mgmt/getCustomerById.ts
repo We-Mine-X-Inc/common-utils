@@ -12,7 +12,7 @@ export function getCustomerById({
 }) {
   return gql`
   query GetCustomerById($customerId: ObjectId) {
-    ${getCustomerGraphSchemaName(env)}(query: ${query}) {
+    ${getCustomerGraphSchemaName(env)}(query: ${JSON.stringify(query)}) {
       notificationPreferences
     }
   }
