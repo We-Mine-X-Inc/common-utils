@@ -20,7 +20,7 @@ export function getHostedMiners({
         ipAddress
         friendlyMinerId
         miner {
-          details {
+          marketDetails {
             model
             description
             efficiency
