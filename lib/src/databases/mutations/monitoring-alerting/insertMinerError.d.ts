@@ -1,5 +1,7 @@
 import { UpdateDataObject } from "../update-data-obj";
-export declare function insertMinerError({ data }: {
+import { Environment } from "wemine-apis";
+export declare function insertMinerError({ env, data, }: {
+    env: Environment;
     data: UpdateDataObject;
 }): import("@apollo/client").DocumentNode;
 //# sourceMappingURL=insertMinerError.d.ts.map

@@ -8,5 +8,6 @@ export declare function getCustomerGraphSchemaName(env: Environment, schemaOptio
 export declare function getHostedMinerGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getPoolGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getMiningWorkGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getMinerErrorGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export {};
 //# sourceMappingURL=environment-tables.d.ts.map

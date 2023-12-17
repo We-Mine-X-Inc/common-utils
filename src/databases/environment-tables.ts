@@ -56,6 +56,17 @@ export function getMiningWorkGraphSchemaName(
   });
 }
 
+export function getMinerErrorGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tablePrefix: "minererror",
+    env,
+    schemaOptions,
+  });
+}
+
 function getTableGraphSchemaName({
   tablePrefix,
   env,
