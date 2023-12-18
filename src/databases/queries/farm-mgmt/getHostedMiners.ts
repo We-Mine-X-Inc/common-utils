@@ -16,6 +16,7 @@ export function getHostedMiners({
     ${getHostedMinerGraphSchemaName(env, {
       forManyDocuments: true,
     })}(query: ${JSON.stringify(query)}, limit: ${MAX_NUM_OF_MINER_IDS}) {
+        _id
         API
         ipAddress
         friendlyMinerId
