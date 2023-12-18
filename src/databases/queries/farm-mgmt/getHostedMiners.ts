@@ -19,6 +19,9 @@ export function getHostedMiners({
         API
         ipAddress
         friendlyMinerId
+        status {
+          poolIsBeingSwitched
+        }
         miner {
           marketDetails {
             model
