@@ -13,7 +13,7 @@ export function getContractById({
   return gql`
   query {
     ${getHostingContractGraphSchemaName(env)}(query: ${JSON.stringify(query)}) {
-      hostingContract
+      poolMiningOptions
     }
   }
 `;

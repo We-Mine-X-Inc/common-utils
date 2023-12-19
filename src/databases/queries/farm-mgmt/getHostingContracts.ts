@@ -15,8 +15,8 @@ export function getHostingContracts({
       forManyDocuments: true,
     })}(query: ${JSON.stringify(query)}) {
         minerIntakeStage
-        hostingContract
         poolActivity
+        poolMiningOptions
     }
   }
 `;
