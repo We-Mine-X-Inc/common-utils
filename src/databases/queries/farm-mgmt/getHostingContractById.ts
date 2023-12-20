@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getHostingContractGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../id-query";
+import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 export function getContractById({
   env,
@@ -10,9 +11,11 @@ export function getContractById({
   env: Environment;
   query: IdQuery;
 }) {
+  const schemaName = getHostingContractGraphSchemaName(env);
+  const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
   query {
-    ${getHostingContractGraphSchemaName(env)}(query: ${JSON.stringify(query)}) {
+    ${schemaName}(query: ${compatibleQuery}) {
       poolMiningOptions
     }
   }

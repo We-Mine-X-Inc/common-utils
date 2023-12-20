@@ -2,6 +2,7 @@ import { gql } from "@apollo/client/core";
 import { getHostedMinerGraphSchemaName } from "../../environment-tables";
 import { Environment } from "wemine-apis";
 import { IdQuery } from "../id-query";
+import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 const MAX_NUM_OF_MINER_IDS = 600;
 
@@ -12,11 +13,11 @@ export function getHostedMinerById({
   env: Environment;
   query: IdQuery;
 }) {
+  const schemaName = getHostedMinerGraphSchemaName(env);
+  const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
   query {
-    ${getHostedMinerGraphSchemaName(env)}(query: ${JSON.stringify(
-    query
-  )}, limit: ${MAX_NUM_OF_MINER_IDS}) {
+    ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_MINER_IDS}) {
         API
         ipAddress
         friendlyMinerId

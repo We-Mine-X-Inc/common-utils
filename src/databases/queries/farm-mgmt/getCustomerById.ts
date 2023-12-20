@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getCustomerGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../id-query";
+import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 export function getCustomerById({
   env,
@@ -10,9 +11,11 @@ export function getCustomerById({
   env: Environment;
   query: IdQuery;
 }) {
+  const schemaName = getCustomerGraphSchemaName(env);
+  const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
   query GetCustomerById($customerId: ObjectId) {
-    ${getCustomerGraphSchemaName(env)}(query: ${JSON.stringify(query)}) {
+    ${schemaName}(query: ${compatibleQuery}) {
       notificationPreferences
     }
   }

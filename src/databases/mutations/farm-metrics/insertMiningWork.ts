@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getMiningWorkGraphSchemaName } from "../../environment-tables";
 import { UpdateDataObject as UpdateDataObject } from "../update-data-obj";
+import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 export function insertMiningWork({
   env,
@@ -10,11 +11,13 @@ export function insertMiningWork({
   env: Environment;
   data: UpdateDataObject;
 }) {
+  const schemaName = getMiningWorkGraphSchemaName(env, {
+    embeddedInFunction: true,
+  });
+  const compatibleMutation = makeGraphQLInputCompatible(data);
   return gql`
   mutation {
-    insertOne${getMiningWorkGraphSchemaName(env, {
-      embeddedInFunction: true,
-    })}(data: ${JSON.stringify(data)}) {
+    insertOne${schemaName}(data: ${compatibleMutation}) {
         _id
     }
   }`;

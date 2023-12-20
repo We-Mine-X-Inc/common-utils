@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
 import { getPoolGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../id-query";
+import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 export function getPoolById({
   env,
@@ -10,9 +11,11 @@ export function getPoolById({
   env: Environment;
   query: IdQuery;
 }) {
+  const schemaName = getPoolGraphSchemaName(env);
+  const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
   query {
-    ${getPoolGraphSchemaName(env)}(query: ${JSON.stringify(query)}) {
+    ${schemaName}(query: ${compatibleQuery}) {
       
     }
   }
