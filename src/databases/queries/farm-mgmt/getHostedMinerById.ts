@@ -18,20 +18,25 @@ export function getHostedMinerById({
   return gql`
   query {
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_MINER_IDS}) {
-        API
-        ipAddress
-        friendlyMinerId
-        miner {
-          details {
-            model
-            description
-            efficiency
-            wattage
-            expectedHashrate
-            coin {
-              symbol
-            }
+      _id
+      API
+      ipAddress
+      friendlyMinerId
+      status {
+        networkStatus
+        poolIsBeingSwitched
+      }
+      miner {
+        marketDetails {
+          model
+          description
+          efficiency
+          wattage
+          expectedHashrate
+          coin {
+            symbol
           }
+        }
       }
     }
   }`;
