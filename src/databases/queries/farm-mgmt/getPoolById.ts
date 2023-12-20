@@ -16,7 +16,12 @@ export function getPoolById({
   return gql`
   query {
     ${schemaName}(query: ${compatibleQuery}) {
-      
+      friendlyPoolId
+      domain
+      protocol
+      username
+      poolType
+      purpose
     }
   }
 `;
