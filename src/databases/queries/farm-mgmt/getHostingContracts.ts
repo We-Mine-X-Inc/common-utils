@@ -18,8 +18,12 @@ export function getHostingContracts({
   query {
     ${schemaName}(query: ${compatibleQuery}) {
         minerIntakeStage
-        poolActivity
-        poolMiningOptions
+        poolActivity {
+          expectedActivePoolIndex
+        }
+        poolMiningOptions {
+          pool
+        }
     }
   }
 `;

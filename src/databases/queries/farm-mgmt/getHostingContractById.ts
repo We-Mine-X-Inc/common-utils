@@ -16,7 +16,13 @@ export function getContractById({
   return gql`
   query {
     ${schemaName}(query: ${compatibleQuery}) {
-      poolMiningOptions
+      minerIntakeStage
+      poolActivity {
+        expectedActivePoolIndex
+      }
+      poolMiningOptions {
+        pool
+      }
     }
   }
 `;
