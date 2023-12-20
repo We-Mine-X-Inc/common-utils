@@ -120,8 +120,7 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
         stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX}
           Failed to verify the mining pool for Braiins.
           
-          Error msg: ${error}.
-          Will reboot the miner and try again.`),
+          Error msg: ${error}.`),
       });
     }
 

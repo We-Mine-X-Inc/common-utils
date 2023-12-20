@@ -200,8 +200,7 @@ export async function verifyGoldshellPool(
         Failed to verify the mining pool for an Goldshell: ${prettyFormat(
           params
         )}.
-        Error msg: ${e}.
-        Will reboot the miner and try again.`;
+        Error msg: ${e}.`;
 
       return Promise.reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,

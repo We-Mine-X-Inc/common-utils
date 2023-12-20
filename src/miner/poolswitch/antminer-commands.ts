@@ -206,8 +206,7 @@ export async function verifyAntminerPool(
         Failed to verify the mining pool for an Antminer: ${prettyFormat(
           params
         )}.
-        Error msg: ${e}.
-        Will reboot the miner and try again.`;
+        Error msg: ${e}.`;
 
       return Promise.reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
