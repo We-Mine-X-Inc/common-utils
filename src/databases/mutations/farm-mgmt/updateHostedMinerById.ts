@@ -18,9 +18,7 @@ export function updateHostedMinerById({
     embeddedInFunction: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);
-  const compatibleMutation = makeGraphQLInputCompatible(
-    JSON.stringify(updatedProperties)
-  );
+  const compatibleMutation = makeGraphQLInputCompatible(updatedProperties);
   return gql`
   mutation {
     updateOne${schemaName}(query: ${compatibleQuery}, set: ${compatibleMutation}) {
