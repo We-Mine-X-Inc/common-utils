@@ -1,6 +1,6 @@
 {
   "name": "common-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Contains modules exposing utility functions.",
   "main": "lib/utils.js",
   "types": "lib/utils.d.ts",
