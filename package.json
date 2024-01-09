@@ -5,6 +5,7 @@
   "main": "lib/utils.js",
   "types": "lib/utils.d.ts",
   "files": [
+    "lib",
     "lib/**/*"
   ],
   "directories": {
