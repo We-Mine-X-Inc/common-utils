@@ -1,6 +1,6 @@
 import AxiosDigestAuth from "@mhoc/axios-digest-auth";
 import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
-import { format as prettyFormat } from "pretty-format";
+// import { format as prettyFormat } from "pretty-format";
 import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 
 import {
@@ -141,7 +141,7 @@ function verifyLivePoolStatus(
         )
       ) {
         throw Error(`Bitmain miner pool update has not taken effect.
-        Please check miner: ${prettyFormat(verifyPoolParams)}`);
+        Please check miner: ${JSON.stringify(verifyPoolParams)}`);
       }
     });
   };
@@ -185,7 +185,7 @@ export async function switchAntminerPool(
     .then(updateMinerConfig(params))
     .catch((e) => {
       const error = `${POOL_SWITCHING_FAILURE_PREFIX}
-        Failed trying to switch Antminer's Pool: ${prettyFormat(params)}.
+        Failed trying to switch Antminer's Pool: ${JSON.stringify(params)}.
         Error msg: ${e}.`;
 
       return Promise.reject(error);
@@ -203,7 +203,7 @@ export async function verifyAntminerPool(
     .then(() => POOL_STATUS_HEALTHY_MSG)
     .catch((e) => {
       const error = `${POOL_VERIFICATION_FAILURE_PREFIX} 
-        Failed to verify the mining pool for an Antminer: ${prettyFormat(
+        Failed to verify the mining pool for an Antminer: ${JSON.stringify(
           params
         )}.
         Error msg: ${e}.`;
@@ -246,7 +246,7 @@ export async function verifyAntminerHashRate(hostedMiner: HostedMiner) {
         rate_5s actualHashRate - ${minerStats["rate_5s"]}
         rate_30m actualHashRate - ${minerStats["rate_30m"]}
         rate_avg actualHashRate - ${minerStats["rate_avg"]}.
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
 
@@ -274,7 +274,7 @@ export async function verifyAntminerFanSpeed(hostedMiner: HostedMiner) {
       Fan speeds are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
 
@@ -317,7 +317,7 @@ export async function verifyAntminerTemperature(hostedMiner: HostedMiner) {
       Temperatures are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
 

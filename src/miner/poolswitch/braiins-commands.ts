@@ -17,7 +17,7 @@ import {
   POOL_SWITCHING_FAILURE_PREFIX,
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
-import { format as prettyFormat } from "pretty-format";
+// import { format as prettyFormat } from "pretty-format";
 import { constructPoolUser } from "../pool-user";
 const { exec } = require("child_process");
 
@@ -53,7 +53,7 @@ export async function verifyBraiinsHashRate(hostedMiner: HostedMiner) {
           MHS 5s actualHashRate - ${hashRate5Secs}
           MHS 15m actualHashRate - ${hashRate15Mins}
           MHS avg actualHashRate - ${hashRateAvg}.
-          Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+          Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
     return MINER_HASHRATE_HEALTHY_MSG;
@@ -78,7 +78,7 @@ export async function verifyBraiinsFanSpeed(hostedMiner: HostedMiner) {
       Fan speeds are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
     return MINER_FAN_SPEED_HEALTHY_MSG;
@@ -103,7 +103,7 @@ export async function verifyBraiinsTemperature(hostedMiner: HostedMiner) {
       Temperatures are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
-        Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
     return MINER_TEMPERATURE_HEALTHY_MSG;
@@ -150,7 +150,7 @@ export async function switchBraiinsPool(
     .then(() => addPool(params))
     .catch((e) => {
       const error = `${POOL_SWITCHING_FAILURE_PREFIX} 
-        Failed trying to switch Braiins's Pool: ${prettyFormat(params)}.
+        Failed trying to switch Braiins's Pool: ${JSON.stringify(params)}.
         Error msg: ${e}.`;
 
       return Promise.reject(error);
@@ -167,7 +167,7 @@ async function verifyNoSetPool(params: SwitchPoolParams) {
       return "No Pool Is Set";
     }
     throw Error(`A pool configuration is set: 
-      ${prettyFormat(poolConfiguration)}`);
+      ${JSON.stringify(poolConfiguration)}`);
   });
 }
 

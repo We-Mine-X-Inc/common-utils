@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
-import { format as prettyFormat } from "pretty-format";
+// import { format as prettyFormat } from "pretty-format";
 import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 import {
   isFanSpeedWithinBounds,
@@ -180,7 +180,7 @@ export async function switchGoldshellPool(
     .then(addPool(params))
     .catch((e) => {
       const error = `${POOL_SWITCHING_FAILURE_PREFIX} 
-        Failed trying to switch Goldshell's Pool: ${prettyFormat(params)}.
+        Failed trying to switch Goldshell's Pool: ${JSON.stringify(params)}.
         Error msg: ${e}.`;
 
       return Promise.reject(error);
@@ -197,7 +197,7 @@ export async function verifyGoldshellPool(
     .then(() => verifyGoldshellHashRate(params.hostedMiner))
     .catch((e) => {
       const error = `${POOL_VERIFICATION_FAILURE_PREFIX} 
-        Failed to verify the mining pool for an Goldshell: ${prettyFormat(
+        Failed to verify the mining pool for an Goldshell: ${JSON.stringify(
           params
         )}.
         Error msg: ${e}.`;
@@ -228,7 +228,7 @@ function verifyLivePoolStatus(verifyPoolParams: VerifyOperationsParams) {
         return Promise.reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
           stackTrace: Error(`Goldshell miner pool update has not taken effect.
-        Please check miner: ${prettyFormat(verifyPoolParams)}`),
+        Please check miner: ${JSON.stringify(verifyPoolParams)}`),
         });
       }
 
@@ -271,7 +271,7 @@ export async function verifyGoldshellHashRate(hostedMiner: HostedMiner) {
             miner --> ${hostedMiner}
             expectedHashRate --> ${expectedHashRateRange}
             actualHashRate -> ${actualHashRate}.
-            Please check miner: ${prettyFormat(ipAddress)}`),
+            Please check miner: ${JSON.stringify(ipAddress)}`),
       });
     }
 
@@ -305,7 +305,7 @@ export async function verifyGoldshellFanSpeed(hostedMiner: HostedMiner) {
           Fan speeds are concerning and not within the expected bounds: 
             expectedTemperature within miner - ${hostedMiner}
             malfunctioning fan speeds: ${malfunctioningFans}. 
-            Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
 
@@ -338,7 +338,7 @@ export async function verifyGoldshellTemperature(hostedMiner: HostedMiner) {
           Temperatures are concerning and not within the expected bounds: 
             expectedTemperature within miner - ${hostedMiner}
             malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
-            Please check miner: ${prettyFormat(hostedMiner.ipAddress)}`),
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
     }
 
