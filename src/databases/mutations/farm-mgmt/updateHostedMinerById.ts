@@ -27,7 +27,6 @@ export function updateHostedMinerById({
       friendlyMinerId
       ipAddress
       macAddress
-      owner
       status {
         lastOnlineDate
         networkStatus
