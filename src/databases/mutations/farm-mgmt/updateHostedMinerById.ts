@@ -28,7 +28,6 @@ export function updateHostedMinerById({
       ipAddress
       macAddress
       owner
-      serialNumber
       status {
         lastOnlineDate
         networkStatus
