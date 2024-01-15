@@ -16,9 +16,10 @@ export function insertMiningWork({
   });
   const compatibleMutation = makeGraphQLInputCompatible(data);
   return gql`
-  mutation {
-    insertOne${schemaName}(data: ${compatibleMutation}) {
+    mutation {
+      insertOne${schemaName}(data: ${compatibleMutation}) {
         _id
+      }
     }
-  }`;
+  `;
 }
