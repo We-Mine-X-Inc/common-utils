@@ -23,6 +23,7 @@ export function getHostedMiners({
       API
       ipAddress
       friendlyMinerId
+      macAddress
       status {
         networkStatus
         poolIsBeingSwitched
