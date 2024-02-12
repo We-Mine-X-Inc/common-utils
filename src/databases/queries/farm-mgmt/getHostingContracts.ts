@@ -22,7 +22,16 @@ export function getHostingContracts({
           expectedActivePoolIndex
         }
         poolMiningOptions {
-          pool
+          pool {
+            protocol
+            domain
+            username
+            poolType
+            coinType
+            apiToken
+            purpose
+            friendlyPoolId
+          }
         }
     }
   }
