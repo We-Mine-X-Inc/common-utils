@@ -21,16 +21,7 @@ export function getContractById({
         expectedActivePoolIndex
       }
       poolMiningOptions {
-        pool {
-          protocol
-          domain
-          username
-          poolType
-          coinType
-          apiToken
-          purpose
-          friendlyPoolId
-        }
+        poolId
       }
     }
   }
