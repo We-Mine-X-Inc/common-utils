@@ -133,11 +133,11 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
 
     return Promise.reject({
       minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-      stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX} 
+      stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for Braiins.
         Expected: ${{ username: params.pool.username, status: "Alive" }}.
         Active Config: ${{ username: currPoolUser, status: currPoolStatus }}
-        Will reboot the miner and try again.`),
+        Will reboot the miner and try again.`,
     });
   });
 }
