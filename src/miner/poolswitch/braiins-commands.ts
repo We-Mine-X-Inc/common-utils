@@ -117,10 +117,10 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
     if (error) {
       return Promise.reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX}
+        stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX}
           Failed to verify the mining pool for Braiins.
           
-          Error msg: ${error}.`),
+          Error msg: ${error}.`,
       });
     }
 
