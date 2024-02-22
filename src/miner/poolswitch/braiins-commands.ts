@@ -22,122 +22,132 @@ import { constructPoolUser } from "../pool-user";
 const { exec } = require("child_process");
 
 export async function verifyBraiinsHashRate(hostedMiner: HostedMiner) {
-  const minerIP = hostedMiner.ipAddress;
-  const getSummaryCommand = `echo '{"command":"summary"}' | nc ${minerIP} 4028 | jq .`;
-  exec(getSummaryCommand, (error: any, stdout: any, stderr: any) => {
-    const minerStats = JSON.parse(stdout);
-    const hashRate5Secs = minerStats["MHS 5s"];
-    const hashRate15Mins = minerStats["MHS 15m"];
-    const hashRateAvg = minerStats["MHS avg"];
-    if (
-      !(
-        isHashRateWithinBounds({
-          hostedMiner: hostedMiner,
-          actualHashRate: hashRate5Secs,
-        }) &&
-        isHashRateWithinBounds({
-          hostedMiner: hostedMiner,
-          actualHashRate: hashRate15Mins,
-        }) &&
-        isHashRateWithinBounds({
-          hostedMiner: hostedMiner,
-          actualHashRate: hashRateAvg,
-        })
-      )
-    ) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.HASH_RATE_ERROR,
-        stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
-        HashRate not within the expected bounds: 
-          expectedHashRate within miner - ${hostedMiner}
-          MHS 5s actualHashRate - ${hashRate5Secs}
-          MHS 15m actualHashRate - ${hashRate15Mins}
-          MHS avg actualHashRate - ${hashRateAvg}.
-          Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
-      });
-    }
-    return MINER_HASHRATE_HEALTHY_MSG;
+  return new Promise((resolve, reject) => {
+    const minerIP = hostedMiner.ipAddress;
+    const getSummaryCommand = `echo '{"command":"summary"}' | nc ${minerIP} 4028 | jq .`;
+    exec(getSummaryCommand, (error: any, stdout: any, stderr: any) => {
+      const minerStats = JSON.parse(stdout);
+      const hashRate5Secs = minerStats["MHS 5s"];
+      const hashRate15Mins = minerStats["MHS 15m"];
+      const hashRateAvg = minerStats["MHS avg"];
+      if (
+        !(
+          isHashRateWithinBounds({
+            hostedMiner: hostedMiner,
+            actualHashRate: hashRate5Secs,
+          }) &&
+          isHashRateWithinBounds({
+            hostedMiner: hostedMiner,
+            actualHashRate: hashRate15Mins,
+          }) &&
+          isHashRateWithinBounds({
+            hostedMiner: hostedMiner,
+            actualHashRate: hashRateAvg,
+          })
+        )
+      ) {
+        reject({
+          minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+          stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
+          HashRate not within the expected bounds: 
+            expectedHashRate within miner - ${hostedMiner}
+            MHS 5s actualHashRate - ${hashRate5Secs}
+            MHS 15m actualHashRate - ${hashRate15Mins}
+            MHS avg actualHashRate - ${hashRateAvg}.
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+        });
+      }
+      resolve(MINER_HASHRATE_HEALTHY_MSG);
+    });
   });
 }
 
 export async function verifyBraiinsFanSpeed(hostedMiner: HostedMiner) {
-  const minerIP = hostedMiner.ipAddress;
-  const getFanStatsCommand = `echo '{"command":"fans"}' | nc ${minerIP} 4028 | jq .`;
-  exec(getFanStatsCommand, (error: any, stdout: any, stderr: any) => {
-    const minerFanStats = JSON.parse(stdout)["FANS"];
-    const malfunctioningFans = minerFanStats.filter((fanStats: any) => {
-      return isFanSpeedWithinBounds({
-        hostedMiner: hostedMiner,
-        actualFanSpeed: fanStats["RPM"],
+  return new Promise((resolve, reject) => {
+    const minerIP = hostedMiner.ipAddress;
+    const getFanStatsCommand = `echo '{"command":"fans"}' | nc ${minerIP} 4028 | jq .`;
+    exec(getFanStatsCommand, (error: any, stdout: any, stderr: any) => {
+      const minerFanStats = JSON.parse(stdout)["FANS"];
+      const malfunctioningFans = minerFanStats.filter((fanStats: any) => {
+        return isFanSpeedWithinBounds({
+          hostedMiner: hostedMiner,
+          actualFanSpeed: fanStats["RPM"],
+        });
       });
-    });
-    if (malfunctioningFans.length > 0) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
-        stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+      if (malfunctioningFans.length > 0) {
+        reject({
+          minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
+          stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
       Fan speeds are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning fan speeds: ${malfunctioningFans}. 
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
-      });
-    }
-    return MINER_FAN_SPEED_HEALTHY_MSG;
+        });
+      }
+      resolve(MINER_FAN_SPEED_HEALTHY_MSG);
+    });
   });
 }
 
 export async function verifyBraiinsTemperature(hostedMiner: HostedMiner) {
-  const minerIP = hostedMiner.ipAddress;
-  const getTempStatsCommand = `echo '{"command":"temps"}' | nc ${minerIP} 4028 | jq .`;
-  exec(getTempStatsCommand, (error: any, stdout: any, stderr: any) => {
-    const minerTempStats = JSON.parse(stdout)["TEMPS"];
-    const tempMalfunctioningChips = minerTempStats.filter((tempStats: any) => {
-      return isOutletTempWithinBounds({
-        hostedMiner: hostedMiner,
-        actualTemperature: tempStats["Chip"],
-      });
-    });
-    if (tempMalfunctioningChips.length > 0) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
-        stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+  return new Promise((resolve, reject) => {
+    const minerIP = hostedMiner.ipAddress;
+    const getTempStatsCommand = `echo '{"command":"temps"}' | nc ${minerIP} 4028 | jq .`;
+    exec(getTempStatsCommand, (error: any, stdout: any, stderr: any) => {
+      const minerTempStats = JSON.parse(stdout)["TEMPS"];
+      const tempMalfunctioningChips = minerTempStats.filter(
+        (tempStats: any) => {
+          return isOutletTempWithinBounds({
+            hostedMiner: hostedMiner,
+            actualTemperature: tempStats["Chip"],
+          });
+        }
+      );
+      if (tempMalfunctioningChips.length > 0) {
+        reject({
+          minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
+          stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
         expectedTemperature within miner - ${hostedMiner}
         malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
-      });
-    }
-    return MINER_TEMPERATURE_HEALTHY_MSG;
+        });
+      }
+      resolve(MINER_TEMPERATURE_HEALTHY_MSG);
+    });
   });
 }
 
 export async function verifyBraiinsPool(params: VerifyOperationsParams) {
-  const minerIP = params.hostedMiner.ipAddress;
-  const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
-  exec(getPoolsCommand, (error: any, stdout: any, stderr: any) => {
-    if (error) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX}
+  return new Promise((resolve, reject) => {
+    const minerIP = params.hostedMiner.ipAddress;
+    const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
+    exec(getPoolsCommand, (error: any, stdout: any, stderr: any) => {
+      if (error) {
+        reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX}
           Failed to verify the mining pool for Braiins.
           
           Error msg: ${error}.`,
-      });
-    }
+        });
+      }
 
-    const poolConfiguration = JSON.parse(stdout)["POOLS"][0];
-    const currPoolUser = poolConfiguration["User"];
-    const currPoolStatus = poolConfiguration["Status"];
-    if (currPoolUser == params.pool.username && currPoolStatus == "Alive") {
-      return POOL_STATUS_HEALTHY_MSG;
-    }
+      const poolConfiguration = JSON.parse(stdout)["POOLS"][0];
+      const currPoolUser = poolConfiguration["User"];
+      const currPoolStatus = poolConfiguration["Status"];
+      if (currPoolUser == params.pool.username && currPoolStatus == "Alive") {
+        resolve(POOL_STATUS_HEALTHY_MSG);
+      }
 
-    return Promise.reject({
-      minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-      stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX} 
+      reject({
+        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+        stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for Braiins.
         Expected: ${{ username: params.pool.username, status: "Alive" }}.
         Active Config: ${{ username: currPoolUser, status: currPoolStatus }}
         Will reboot the miner and try again.`,
+      });
     });
   });
 }
@@ -158,16 +168,18 @@ export async function switchBraiinsPool(
 }
 
 async function verifyNoSetPool(params: SwitchPoolParams) {
-  const minerIP = params.hostedMiner.ipAddress;
-  const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
+  return new Promise((resolve, reject) => {
+    const minerIP = params.hostedMiner.ipAddress;
+    const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
 
-  exec(getPoolsCommand, (error: any, stdout: any, stderr: any) => {
-    const poolConfiguration = JSON.parse(stdout)["POOLS"];
-    if (poolConfiguration.length == 0) {
-      return "No Pool Is Set";
-    }
-    throw Error(`A pool configuration is set: 
+    exec(getPoolsCommand, (error: any, stdout: any, stderr: any) => {
+      const poolConfiguration = JSON.parse(stdout)["POOLS"];
+      if (poolConfiguration.length == 0) {
+        resolve("No Pool Is Set");
+      }
+      reject(`A pool configuration is set: 
       ${JSON.stringify(poolConfiguration)}`);
+    });
   });
 }
 
