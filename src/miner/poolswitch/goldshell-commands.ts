@@ -1,6 +1,9 @@
 import axios from "axios";
-import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
-// import { format as prettyFormat } from "pretty-format";
+import {
+  MinerCommandResolution,
+  SwitchPoolParams,
+  VerifyOperationsParams,
+} from "./common-types";
 import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 import {
   isFanSpeedWithinBounds,
@@ -171,7 +174,7 @@ function constructPoolUrl(pool: Pool) {
 
 export async function switchGoldshellPool(
   params: SwitchPoolParams
-): Promise<any> {
+): Promise<MinerCommandResolution> {
   return await loginToMiner(params.hostedMiner.ipAddress)
     .then(getSettings)
     .then(verifyMinerIsForClient(params))
@@ -183,13 +186,16 @@ export async function switchGoldshellPool(
         Failed trying to switch Goldshell's Pool: ${JSON.stringify(params)}.
         Error msg: ${e}.`;
 
-      return Promise.reject(error);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_SWITCH_ERROR,
+        stackTrace: error,
+      });
     });
 }
 
 export async function verifyGoldshellPool(
   params: VerifyOperationsParams
-): Promise<any> {
+): Promise<MinerCommandResolution> {
   return await loginToMiner(params.hostedMiner.ipAddress)
     .then(getSettings)
     .then(verifyMinerIsForClient(params))
@@ -209,7 +215,9 @@ export async function verifyGoldshellPool(
     });
 }
 
-function verifyLivePoolStatus(verifyPoolParams: VerifyOperationsParams) {
+function verifyLivePoolStatus(
+  verifyPoolParams: VerifyOperationsParams
+): (sessionInfo: SessionInfo) => Promise<MinerCommandResolution> {
   return async (sessionInfo: SessionInfo) => {
     return await axios({
       method: "get",
@@ -237,7 +245,9 @@ function verifyLivePoolStatus(verifyPoolParams: VerifyOperationsParams) {
   };
 }
 
-export async function verifyGoldshellHashRate(hostedMiner: HostedMiner) {
+export async function verifyGoldshellHashRate(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
 
   return await axios({
@@ -279,7 +289,9 @@ export async function verifyGoldshellHashRate(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyGoldshellFanSpeed(hostedMiner: HostedMiner) {
+export async function verifyGoldshellFanSpeed(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
 
   return await axios({
@@ -313,7 +325,9 @@ export async function verifyGoldshellFanSpeed(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyGoldshellTemperature(hostedMiner: HostedMiner) {
+export async function verifyGoldshellTemperature(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
 
   return await axios({

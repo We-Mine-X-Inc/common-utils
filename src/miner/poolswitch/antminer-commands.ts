@@ -1,5 +1,9 @@
 import AxiosDigestAuth from "@mhoc/axios-digest-auth";
-import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
+import {
+  MinerCommandResolution,
+  SwitchPoolParams,
+  VerifyOperationsParams,
+} from "./common-types";
 // import { format as prettyFormat } from "pretty-format";
 import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 
@@ -178,7 +182,7 @@ function constructPoolUrl(pool: Pool) {
 
 export async function switchAntminerPool(
   params: SwitchPoolParams
-): Promise<any> {
+): Promise<MinerCommandResolution> {
   return await getSytemInfo(params.hostedMiner.ipAddress)
     .then(verifyMinerIsForClient(params))
     .then(getMinerConfig(params))
@@ -188,13 +192,16 @@ export async function switchAntminerPool(
         Failed trying to switch Antminer's Pool: ${JSON.stringify(params)}.
         Error msg: ${e}.`;
 
-      return Promise.reject(error);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_SWITCH_ERROR,
+        stackTrace: error,
+      });
     });
 }
 
 export async function verifyAntminerPool(
   params: VerifyOperationsParams
-): Promise<any> {
+): Promise<MinerCommandResolution> {
   return await getSytemInfo(params.hostedMiner.ipAddress)
     .then(verifyMinerIsForClient(params))
     .then(getMinerConfig(params))
@@ -215,7 +222,9 @@ export async function verifyAntminerPool(
     });
 }
 
-export async function verifyAntminerHashRate(hostedMiner: HostedMiner) {
+export async function verifyAntminerHashRate(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
     method: "GET",
@@ -254,7 +263,9 @@ export async function verifyAntminerHashRate(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyAntminerFanSpeed(hostedMiner: HostedMiner) {
+export async function verifyAntminerFanSpeed(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
     method: "GET",
@@ -282,7 +293,9 @@ export async function verifyAntminerFanSpeed(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyAntminerTemperature(hostedMiner: HostedMiner) {
+export async function verifyAntminerTemperature(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
     method: "GET",

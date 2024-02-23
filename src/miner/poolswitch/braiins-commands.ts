@@ -1,6 +1,10 @@
 import axios from "axios";
 import { HostedMiner, MinerErrorType } from "wemine-apis";
-import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
+import {
+  MinerCommandResolution,
+  SwitchPoolParams,
+  VerifyOperationsParams,
+} from "./common-types";
 import {
   isFanSpeedWithinBounds,
   isHashRateWithinBounds,
@@ -17,11 +21,12 @@ import {
   POOL_SWITCHING_FAILURE_PREFIX,
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
-// import { format as prettyFormat } from "pretty-format";
 import { constructPoolUser } from "../pool-user";
 const { exec } = require("child_process");
 
-export async function verifyBraiinsHashRate(hostedMiner: HostedMiner) {
+export async function verifyBraiinsHashRate(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = hostedMiner.ipAddress;
     const getSummaryCommand = `echo '{"command":"summary"}' | nc ${minerIP} 4028 | jq .`;
@@ -62,7 +67,9 @@ export async function verifyBraiinsHashRate(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyBraiinsFanSpeed(hostedMiner: HostedMiner) {
+export async function verifyBraiinsFanSpeed(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = hostedMiner.ipAddress;
     const getFanStatsCommand = `echo '{"command":"fans"}' | nc ${minerIP} 4028 | jq .`;
@@ -89,7 +96,9 @@ export async function verifyBraiinsFanSpeed(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyBraiinsTemperature(hostedMiner: HostedMiner) {
+export async function verifyBraiinsTemperature(
+  hostedMiner: HostedMiner
+): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = hostedMiner.ipAddress;
     const getTempStatsCommand = `echo '{"command":"temps"}' | nc ${minerIP} 4028 | jq .`;
@@ -118,7 +127,9 @@ export async function verifyBraiinsTemperature(hostedMiner: HostedMiner) {
   });
 }
 
-export async function verifyBraiinsPool(params: VerifyOperationsParams) {
+export async function verifyBraiinsPool(
+  params: VerifyOperationsParams
+): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = params.hostedMiner.ipAddress;
     const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
@@ -126,10 +137,10 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
       if (error) {
         reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-          stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX}
+          stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX}
           Failed to verify the mining pool for Braiins.
           
-          Error msg: ${error}.`,
+          Error msg: ${error}.`),
         });
       }
 
@@ -142,11 +153,11 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
 
       reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX} 
+        stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for Braiins.
         Expected: ${{ username: params.pool.username, status: "Alive" }}.
         Active Config: ${{ username: currPoolUser, status: currPoolStatus }}
-        Will reboot the miner and try again.`,
+        Will reboot the miner and try again.`),
       });
     });
   });
@@ -154,7 +165,7 @@ export async function verifyBraiinsPool(params: VerifyOperationsParams) {
 
 export async function switchBraiinsPool(
   params: SwitchPoolParams
-): Promise<any> {
+): Promise<MinerCommandResolution> {
   return await removePool(params)
     .then(() => verifyNoSetPool(params))
     .then(() => addPool(params))
@@ -163,11 +174,16 @@ export async function switchBraiinsPool(
         Failed trying to switch Braiins's Pool: ${JSON.stringify(params)}.
         Error msg: ${e}.`;
 
-      return Promise.reject(error);
+      return Promise.reject({
+        minerErrorType: MinerErrorType.POOL_SWITCH_ERROR,
+        stackTrace: error,
+      });
     });
 }
 
-async function verifyNoSetPool(params: SwitchPoolParams) {
+async function verifyNoSetPool(
+  params: SwitchPoolParams
+): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = params.hostedMiner.ipAddress;
     const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
@@ -177,43 +193,56 @@ async function verifyNoSetPool(params: SwitchPoolParams) {
       if (poolConfiguration.length == 0) {
         resolve("No Pool Is Set");
       }
-      reject(`A pool configuration is set: 
-      ${JSON.stringify(poolConfiguration)}`);
+      reject({
+        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+        stackTrace: `A pool configuration is set: 
+      ${JSON.stringify(poolConfiguration)}`,
+      });
     });
   });
 }
 
 async function removePool(params: SwitchPoolParams) {
-  const minerIP = params.hostedMiner.ipAddress;
-  const removePoolCommand = `echo '{"command":"removepool","parameter":0}' | nc ${minerIP} 4028 | jq .`;
+  return new Promise((resolve, reject) => {
+    const minerIP = params.hostedMiner.ipAddress;
+    const removePoolCommand = `echo '{"command":"removepool","parameter":0}' | nc ${minerIP} 4028 | jq .`;
 
-  exec(removePoolCommand, (error: any, stdout: any, stderr: any) => {
-    if (stdout) {
-      return stdout;
-    }
-    if (error || stderr) {
-      throw Error(`Failed to remove pool. 
+    exec(removePoolCommand, (error: any, stdout: any, stderr: any) => {
+      if (stdout) {
+        resolve(stdout);
+      }
+      if (error || stderr) {
+        reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: Error(`Failed to remove pool. 
         Error: ${error}.
-        Stderr: ${stderr}.`);
-    }
+        Stderr: ${stderr}.`),
+        });
+      }
+    });
   });
 }
 
 async function addPool(params: SwitchPoolParams) {
-  const minerIP = params.hostedMiner.ipAddress;
-  const poolUrl = `${params.pool.protocol}://${params.pool.domain}`;
-  const poolUsr = constructPoolUser(params);
-  const addPoolCommand = `echo '{"command":"addpool","parameter":"${poolUrl},${poolUsr},"}' | nc ${minerIP} 4028 | jq .`;
+  return new Promise((resolve, reject) => {
+    const minerIP = params.hostedMiner.ipAddress;
+    const poolUrl = `${params.pool.protocol}://${params.pool.domain}`;
+    const poolUsr = constructPoolUser(params);
+    const addPoolCommand = `echo '{"command":"addpool","parameter":"${poolUrl},${poolUsr},"}' | nc ${minerIP} 4028 | jq .`;
 
-  exec(addPoolCommand, (error: any, stdout: any, stderr: any) => {
-    if (stdout) {
-      return stdout;
-    }
-    if (error || stderr) {
-      throw Error(`Failed to remove pool. 
-        Error: ${error}.
-        Stderr: ${stderr}.`);
-    }
+    exec(addPoolCommand, (error: any, stdout: any, stderr: any) => {
+      if (stdout) {
+        resolve(stdout);
+      }
+      if (error || stderr) {
+        reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: Error(`Failed to remove pool. 
+          Error: ${error}.
+          Stderr: ${stderr}.`),
+        });
+      }
+    });
   });
 }
 

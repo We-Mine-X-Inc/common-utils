@@ -7,7 +7,11 @@ import {
   verifyAntminerPool,
   verifyAntminerTemperature,
 } from "./antminer-commands";
-import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
+import {
+  MinerCommandResolution,
+  SwitchPoolParams,
+  VerifyOperationsParams,
+} from "./common-types";
 import {
   rebootGoldshellMiner,
   switchGoldshellPool,
@@ -28,7 +32,7 @@ import {
 
 export const POOL_SWITCH_FUNCTION: Record<
   MinerApiType,
-  (p: SwitchPoolParams) => Promise<any>
+  (p: SwitchPoolParams) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: switchUnknownPool,
   [MinerApiType.ANTMINER]: switchAntminerPool,
@@ -38,7 +42,7 @@ export const POOL_SWITCH_FUNCTION: Record<
 
 export const POOL_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (p: VerifyOperationsParams) => Promise<any>
+  (p: VerifyOperationsParams) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownApiPool,
   [MinerApiType.ANTMINER]: verifyAntminerPool,
@@ -48,7 +52,7 @@ export const POOL_VERIFICATION_FUNCTION: Record<
 
 export const REBOOT_MINER_FUNCTION: Record<
   MinerApiType,
-  (p: SwitchPoolParams) => Promise<any>
+  (p: SwitchPoolParams) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: rebootUnknownMiner,
   [MinerApiType.ANTMINER]: rebootAntminerMiner,
@@ -58,7 +62,7 @@ export const REBOOT_MINER_FUNCTION: Record<
 
 export const HASHRATE_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMiner) => Promise<any>
+  (hostedMiner: HostedMiner) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerHashRate,
   [MinerApiType.ANTMINER]: verifyAntminerHashRate,
@@ -68,7 +72,7 @@ export const HASHRATE_VERIFICATION_FUNCTION: Record<
 
 export const FAN_SPEED_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMiner) => Promise<any>
+  (hostedMiner: HostedMiner) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerFanSpeed,
   [MinerApiType.ANTMINER]: verifyAntminerFanSpeed,
@@ -78,7 +82,7 @@ export const FAN_SPEED_VERIFICATION_FUNCTION: Record<
 
 export const TEMPERATURE_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMiner) => Promise<any>
+  (hostedMiner: HostedMiner) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerTemperature,
   [MinerApiType.ANTMINER]: verifyAntminerTemperature,
@@ -86,28 +90,38 @@ export const TEMPERATURE_VERIFICATION_FUNCTION: Record<
   [MinerApiType.GOLDSHELL]: verifyGoldshellTemperature,
 };
 
-async function switchUnknownPool(params: SwitchPoolParams): Promise<any> {
+async function switchUnknownPool(
+  params: SwitchPoolParams
+): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(params)}`);
 }
 
 async function verifyUnknownApiPool(
   params: VerifyOperationsParams
-): Promise<any> {
+): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(params)}`);
 }
 
-async function rebootUnknownMiner(params: SwitchPoolParams): Promise<any> {
+async function rebootUnknownMiner(
+  params: SwitchPoolParams
+): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(params)}`);
 }
 
-async function verifyUnknownMinerHashRate(miner: HostedMiner): Promise<any> {
+async function verifyUnknownMinerHashRate(
+  miner: HostedMiner
+): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
 
-async function verifyUnknownMinerFanSpeed(miner: HostedMiner): Promise<any> {
+async function verifyUnknownMinerFanSpeed(
+  miner: HostedMiner
+): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
 
-async function verifyUnknownMinerTemperature(miner: HostedMiner): Promise<any> {
+async function verifyUnknownMinerTemperature(
+  miner: HostedMiner
+): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }

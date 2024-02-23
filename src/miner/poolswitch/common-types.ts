@@ -1,4 +1,4 @@
-import { HostedMiner, Pool } from "wemine-apis";
+import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
 
 export type SwitchPoolParams = {
   hostedMiner: HostedMiner;
@@ -8,4 +8,11 @@ export type SwitchPoolParams = {
 export type VerifyOperationsParams = {
   hostedMiner: HostedMiner;
   pool: Pool;
+};
+
+export type MinerCommandResolution = any | MinerErrorInfo;
+
+export type MinerErrorInfo = {
+  minerErrorType: MinerErrorType;
+  stackTrace: string;
 };
