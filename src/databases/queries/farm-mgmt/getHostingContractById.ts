@@ -4,7 +4,7 @@ import { getHostingContractGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../id-query";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
-export function getContractById({
+export function getHostingContractById({
   env,
   query,
 }: {
