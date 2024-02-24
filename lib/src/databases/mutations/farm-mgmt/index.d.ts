@@ -1,3 +1,3 @@
-export * from "../monitoring-alerting/insertMinerError";
 export * from "./updateHostedMinerById";
+export * from "./updateHostingContractById";
 //# sourceMappingURL=index.d.ts.map
