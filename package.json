@@ -12,7 +12,7 @@
     "test": "tests"
   },
   "browser": {
-    "child_process": false
+    "@hokify": false
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
