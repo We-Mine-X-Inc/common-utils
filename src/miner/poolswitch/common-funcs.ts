@@ -1,13 +1,13 @@
-import { HostedMiner, assertMiner } from "wemine-apis";
+import { HostedMinerInflated, assertMiner } from "wemine-apis";
 
 export function isHashRateWithinBounds(params: {
-  hostedMiner: HostedMiner;
+  hostedMiner: HostedMinerInflated;
   actualHashRate: number;
 }) {
   const miner = params.hostedMiner.miner;
   assertMiner(miner);
 
-  const expectedHashRateRange = miner.metadata?.expectedHashRateRange;
+  const expectedHashRateRange = miner.operationDetails.expectedHashRateRange;
   return (
     !!expectedHashRateRange &&
     expectedHashRateRange.minimum <= params.actualHashRate &&
@@ -16,13 +16,13 @@ export function isHashRateWithinBounds(params: {
 }
 
 export function isFanSpeedWithinBounds(params: {
-  hostedMiner: HostedMiner;
+  hostedMiner: HostedMinerInflated;
   actualFanSpeed: number;
 }) {
   const miner = params.hostedMiner.miner;
   assertMiner(miner);
 
-  const expectedFanSpeedRange = miner.metadata?.expectedFanSpeedRange;
+  const expectedFanSpeedRange = miner.operationDetails.expectedFanSpeedRange;
   return (
     !!expectedFanSpeedRange &&
     expectedFanSpeedRange.minimum <= params.actualFanSpeed &&
@@ -31,13 +31,13 @@ export function isFanSpeedWithinBounds(params: {
 }
 
 export function isInletTempWithinBounds(params: {
-  hostedMiner: HostedMiner;
+  hostedMiner: HostedMinerInflated;
   actualTemperature: number;
 }) {
   const miner = params.hostedMiner.miner;
   assertMiner(miner);
 
-  const expectedInletTempRange = miner.metadata?.expectedInletTempRange;
+  const expectedInletTempRange = miner.operationDetails.expectedInletTempRange;
   return (
     !!expectedInletTempRange &&
     expectedInletTempRange.minimum <= params.actualTemperature &&
@@ -46,13 +46,14 @@ export function isInletTempWithinBounds(params: {
 }
 
 export function isOutletTempWithinBounds(params: {
-  hostedMiner: HostedMiner;
+  hostedMiner: HostedMinerInflated;
   actualTemperature: number;
 }) {
   const miner = params.hostedMiner.miner;
   assertMiner(miner);
 
-  const expectedOutletTempRange = miner.metadata?.expectedOutletTempRange;
+  const expectedOutletTempRange =
+    miner.operationDetails.expectedOutletTempRange;
   return (
     !!expectedOutletTempRange &&
     expectedOutletTempRange.minimum <= params.actualTemperature &&

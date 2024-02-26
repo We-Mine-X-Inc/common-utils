@@ -1,18 +1,18 @@
-import { HostedMiner } from "wemine-apis";
+import { HostedMinerInflated } from "wemine-apis";
 export declare function isHashRateWithinBounds(params: {
-    hostedMiner: HostedMiner;
+    hostedMiner: HostedMinerInflated;
     actualHashRate: number;
 }): boolean;
 export declare function isFanSpeedWithinBounds(params: {
-    hostedMiner: HostedMiner;
+    hostedMiner: HostedMinerInflated;
     actualFanSpeed: number;
 }): boolean;
 export declare function isInletTempWithinBounds(params: {
-    hostedMiner: HostedMiner;
+    hostedMiner: HostedMinerInflated;
     actualTemperature: number;
 }): boolean;
 export declare function isOutletTempWithinBounds(params: {
-    hostedMiner: HostedMiner;
+    hostedMiner: HostedMinerInflated;
     actualTemperature: number;
 }): boolean;
 //# sourceMappingURL=common-funcs.d.ts.map

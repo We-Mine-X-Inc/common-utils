@@ -5,7 +5,7 @@ import {
   VerifyOperationsParams,
 } from "./common-types";
 // import { format as prettyFormat } from "pretty-format";
-import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
+import { HostedMinerInflated, MinerErrorType, Pool } from "wemine-apis";
 
 import {
   isFanSpeedWithinBounds,
@@ -51,7 +51,7 @@ type PoolValidationInfo = {
   macAddress: string;
 };
 
-type MinerValidator = (param: PoolValidationInfo) => SwitchPoolParams;
+type MinerValidator<T> = (param: PoolValidationInfo) => T;
 
 type PoolConfigInfo = {
   "bitmain-fan-ctrl": boolean;
@@ -81,7 +81,7 @@ async function getSytemInfo(ipAddress: string): Promise<PoolValidationInfo> {
 
 function verifyMinerIsForClient<
   T extends SwitchPoolParams | VerifyOperationsParams
->(params: T): MinerValidator {
+>(params: T): MinerValidator<T> {
   return (validationInfo: PoolValidationInfo) => {
     if (validationInfo.macAddress != params.hostedMiner.macAddress) {
       throw Error("Miner mismatch. The MAC does not match the expected IP.");
@@ -223,7 +223,7 @@ export async function verifyAntminerPool(
 }
 
 export async function verifyAntminerHashRate(
-  hostedMiner: HostedMiner
+  hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
@@ -264,7 +264,7 @@ export async function verifyAntminerHashRate(
 }
 
 export async function verifyAntminerFanSpeed(
-  hostedMiner: HostedMiner
+  hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
@@ -294,7 +294,7 @@ export async function verifyAntminerFanSpeed(
 }
 
 export async function verifyAntminerTemperature(
-  hostedMiner: HostedMiner
+  hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },

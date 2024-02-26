@@ -4,7 +4,7 @@ import {
   SwitchPoolParams,
   VerifyOperationsParams,
 } from "./common-types";
-import { HostedMiner, MinerErrorType, Pool } from "wemine-apis";
+import { HostedMinerInflated, MinerErrorType, Pool } from "wemine-apis";
 import {
   isFanSpeedWithinBounds,
   isHashRateWithinBounds,
@@ -246,7 +246,7 @@ function verifyLivePoolStatus(
 }
 
 export async function verifyGoldshellHashRate(
-  hostedMiner: HostedMiner
+  hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
 
@@ -272,7 +272,8 @@ export async function verifyGoldshellHashRate(
       const miner = hostedMiner.miner;
       assertMiner(miner);
 
-      const expectedHashRateRange = miner.metadata?.expectedHashRateRange;
+      const expectedHashRateRange =
+        miner.operationDetails.expectedHashRateRange;
 
       return Promise.reject({
         minerErrorType: MinerErrorType.HASH_RATE_ERROR,
@@ -290,7 +291,7 @@ export async function verifyGoldshellHashRate(
 }
 
 export async function verifyGoldshellFanSpeed(
-  hostedMiner: HostedMiner
+  hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
 
@@ -326,7 +327,7 @@ export async function verifyGoldshellFanSpeed(
 }
 
 export async function verifyGoldshellTemperature(
-  hostedMiner: HostedMiner
+  hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
 

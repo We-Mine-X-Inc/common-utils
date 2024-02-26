@@ -1,4 +1,4 @@
-import { HostedMiner, MinerApiType } from "wemine-apis";
+import { HostedMinerInflated, MinerApiType } from "wemine-apis";
 import {
   rebootAntminerMiner,
   switchAntminerPool,
@@ -62,7 +62,7 @@ export const REBOOT_MINER_FUNCTION: Record<
 
 export const HASHRATE_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMiner) => Promise<MinerCommandResolution>
+  (hostedMiner: HostedMinerInflated) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerHashRate,
   [MinerApiType.ANTMINER]: verifyAntminerHashRate,
@@ -72,7 +72,7 @@ export const HASHRATE_VERIFICATION_FUNCTION: Record<
 
 export const FAN_SPEED_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMiner) => Promise<MinerCommandResolution>
+  (hostedMiner: HostedMinerInflated) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerFanSpeed,
   [MinerApiType.ANTMINER]: verifyAntminerFanSpeed,
@@ -82,7 +82,7 @@ export const FAN_SPEED_VERIFICATION_FUNCTION: Record<
 
 export const TEMPERATURE_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMiner) => Promise<MinerCommandResolution>
+  (hostedMiner: HostedMinerInflated) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerTemperature,
   [MinerApiType.ANTMINER]: verifyAntminerTemperature,
@@ -109,19 +109,19 @@ async function rebootUnknownMiner(
 }
 
 async function verifyUnknownMinerHashRate(
-  miner: HostedMiner
+  miner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
 
 async function verifyUnknownMinerFanSpeed(
-  miner: HostedMiner
+  miner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
 
 async function verifyUnknownMinerTemperature(
-  miner: HostedMiner
+  miner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
