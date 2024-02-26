@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
+import { TransferableObjectId } from "wemine-apis";
 
 export type IdQuery = {
-  _id: Types.ObjectId;
+  _id: TransferableObjectId;
 };
