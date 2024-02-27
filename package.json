@@ -12,7 +12,7 @@
     "test": "tests"
   },
   "browser": {
-    "@hokify": false
+    "@hokify/agenda": false
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
