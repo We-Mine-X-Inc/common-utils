@@ -4,8 +4,6 @@ import { Environment } from "wemine-apis";
 import { IdQuery } from "../id-query";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
-const MAX_NUM_OF_MINER_IDS = 600;
-
 export function getHostedMinerById({
   env,
   query,
@@ -17,7 +15,7 @@ export function getHostedMinerById({
   const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
   query {
-    ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_MINER_IDS}) {
+    ${schemaName}(query: ${compatibleQuery}) {
       _id
       API
       ipAddress
