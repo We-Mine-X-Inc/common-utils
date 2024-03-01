@@ -25,6 +25,7 @@ export function getHostedMiners({
       friendlyMinerId
       macAddress
       status {
+        lastOnlineDate
         networkStatus
         poolIsBeingSwitched
         isFarmManaged

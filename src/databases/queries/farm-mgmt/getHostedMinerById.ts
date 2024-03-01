@@ -19,10 +19,13 @@ export function getHostedMinerById({
       _id
       API
       ipAddress
+      macAddress
       friendlyMinerId
       status {
+        lastOnlineDate
         networkStatus
         poolIsBeingSwitched
+        isFarmManaged
       }
       miner {
         marketDetails {

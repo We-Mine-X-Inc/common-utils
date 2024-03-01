@@ -11,9 +11,6 @@
   "directories": {
     "test": "tests"
   },
-  "browser": {
-    "@hokify/agenda": false
-  },
   "dependencies": {
     "@apollo/client": "^3.8.7",
     "@hokify/agenda": "^6.3.0",
