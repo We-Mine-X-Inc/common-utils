@@ -42,6 +42,11 @@ export function getHostedMiners({
           }
         }
       }
+      powerController {
+        managementMetadata {
+          friendlyPowerControllerId
+        }
+      }
     }
   }`;
 }
