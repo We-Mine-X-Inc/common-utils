@@ -6,7 +6,7 @@ import {
 } from "wemine-apis";
 
 export type SwitchPoolParams = {
-  hostedMiner: HostedMiner;
+  hostedMiner: HostedMiner | HostedMinerInflated;
   pool: Pool;
 };
 
