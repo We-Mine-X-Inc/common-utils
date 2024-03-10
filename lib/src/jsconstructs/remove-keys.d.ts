@@ -1,2 +1,3 @@
-export declare const removeKeys: (obj: any, keys: string[]) => any;
+export declare function removeKeys(obj: any, keys: string[]): (obj: any, keys: string[]) => any;
+export declare function removeNestedNullUndefined(obj: any): void;
 //# sourceMappingURL=remove-keys.d.ts.map

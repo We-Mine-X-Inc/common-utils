@@ -4,6 +4,7 @@ import { getHostingContractGraphSchemaName } from "../../environment-tables";
 import { IdQuery } from "../../queries/id-query";
 import { UpdateDataObject } from "../update-data-obj";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
+import { removeNestedNullUndefined } from "@/utils";
 
 export function updateHostingContractById({
   env,
@@ -18,7 +19,9 @@ export function updateHostingContractById({
     embeddedInFunction: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);
-  const compatibleMutation = makeGraphQLInputCompatible(updatedProperties);
+  const compatibleMutation = makeGraphQLInputCompatible(
+    removeNestedNullUndefined(updatedProperties)
+  );
   return gql`
   mutation {
     updateOne${schemaName}(query: ${compatibleQuery}, set: ${compatibleMutation}) {
