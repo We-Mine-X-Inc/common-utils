@@ -78,9 +78,9 @@ export async function verifyBraiinsFanSpeed(
     exec(getFanStatsCommand, (error: any, stdout: any, stderr: any) => {
       const minerFanStats = JSON.parse(stdout)["FANS"];
       const malfunctioningFans = minerFanStats.filter((fanStats: any) => {
-        return isFanSpeedWithinBounds({
+        return !isFanSpeedWithinBounds({
           hostedMiner: hostedMiner,
-          actualFanSpeed: fanStats["RPM"],
+          actualFanSpeed: parseInt(fanStats["RPM"]),
         });
       });
       if (malfunctioningFans.length > 0) {

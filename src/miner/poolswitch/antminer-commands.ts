@@ -285,7 +285,7 @@ export async function verifyAntminerFanSpeed(
   }).then((res) => {
     const minerFanSpeeds: AntminerFanInfo = res.data["STATS"][0];
     const malfunctioningFans = minerFanSpeeds.fan.filter((fanSpeed) => {
-      return isFanSpeedWithinBounds({
+      return !isFanSpeedWithinBounds({
         hostedMiner: hostedMiner,
         actualFanSpeed: fanSpeed,
       });
