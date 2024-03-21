@@ -15,6 +15,8 @@ function getPoolPaymentMethod(switchPoolInfo: HostedMinerConfigParams) {
     case PoolType.SLUSH_POOL:
     case PoolType.DX_POOL:
       return "";
+    case PoolType.ANT_POOL:
+      return "";
     default:
       return "";
   }
