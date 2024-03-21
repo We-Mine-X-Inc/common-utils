@@ -352,7 +352,7 @@ export async function verifyGoldshellTemperature(
   }).then((res) => {
     const chipStats = res.data["data"];
     const chipTemps = chipStats.map((chipStats: any) =>
-      chipStats["temp"].match(NUMBERS_ONLY_REGEX)
+      parseInt(chipStats["temp"].match(NUMBERS_ONLY_REGEX))
     );
     const tempMalfunctioningChips = chipTemps.filter((chipTemp: number) => {
       return !isOutletTempWithinBounds({

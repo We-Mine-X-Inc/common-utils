@@ -62,7 +62,7 @@ type PoolConfigInfo = {
 };
 
 type AntminerChainInfo = {
-  temp_chip: Array<number>;
+  temp_pcb: Array<number>;
 };
 
 type AntminerFanInfo = {
@@ -317,7 +317,7 @@ export async function verifyAntminerTemperature(
   }).then((res) => {
     const minerChains: Array<AntminerChainInfo> = res.data["STATS"][0]["chain"];
     const tempMalfunctioningChips = minerChains.filter((chainStats) => {
-      const [inlet1, inlet2, outlet1, outlet2] = chainStats.temp_chip;
+      const [inlet1, inlet2, outlet1, outlet2] = chainStats.temp_pcb;
       return !(
         isInletTempWithinBounds({
           hostedMiner: hostedMiner,
