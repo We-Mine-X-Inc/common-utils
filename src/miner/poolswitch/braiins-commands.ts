@@ -55,7 +55,9 @@ export async function verifyBraiinsHashRate(
           minerErrorType: MinerErrorType.HASH_RATE_ERROR,
           stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
           HashRate not within the expected bounds: 
-            expectedHashRate within miner - ${hostedMiner}
+            expectedHashRate for miner - ${
+              hostedMiner.miner.operationDetails.expectedHashRateRange
+            }
             MHS 5s actualHashRate - ${hashRate5Secs}
             MHS 15m actualHashRate - ${hashRate15Mins}
             MHS avg actualHashRate - ${hashRateAvg}.
