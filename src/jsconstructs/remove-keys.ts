@@ -1,9 +1,7 @@
-export function removeKeys(
-  obj: any,
-  keys: string[]
-): (obj: any, keys: string[]) => any {
-  return (obj: any, keys: string[]) =>
-    obj !== Object(obj)
+export function removeKeys(obj: any, keys: string[]): any {
+  const objCopy = { ...obj };
+  function innerRemoveKeys(obj: any, keys: string[]) {
+    return obj !== Object(obj)
       ? obj
       : Array.isArray(obj)
       ? obj.map((item) => removeKeys(item, keys))
@@ -13,6 +11,8 @@ export function removeKeys(
             (acc, x) => Object.assign(acc, { [x]: removeKeys(obj[x], keys) }),
             {}
           );
+  }
+  return innerRemoveKeys(objCopy, keys);
 }
 
 export function removeNestedNullUndefined(obj: any) {
