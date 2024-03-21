@@ -42,10 +42,22 @@ export function getHostedMiners({
           }
         }
         operationDetails {
-          expectedHashrateRange
-          expectedFanSpeedRange
-          expectedInletTempRange
-          expectedOutletTempRange
+          expectedHashrateRange {
+            minimum
+            maximum
+          }
+          expectedFanSpeedRange {
+            minimum
+            maximum
+          }
+          expectedInletTempRange {
+            minimum
+            maximum
+          }
+          expectedOutletTempRange {
+            minimum
+            maximum
+          }
         }
       }
       powerController {
