@@ -261,9 +261,9 @@ export async function verifyAntminerHashRate(
         minerErrorType: MinerErrorType.HASH_RATE_ERROR,
         stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
       HashRate not within the expected bounds: 
-        expectedHashRate for miner - ${
+        expectedHashRate for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedHashRateRange
-        }
+        )}
         rate_5s actualHashRate - ${minerStats["rate_5s"]}
         rate_30m actualHashRate - ${minerStats["rate_30m"]}
         rate_avg actualHashRate - ${minerStats["rate_avg"]}.
