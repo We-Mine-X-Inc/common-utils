@@ -38,6 +38,12 @@ export function getHostedMinerById({
             symbol
           }
         }
+        operationDetails {
+          expectedHashrateRange
+          expectedFanSpeedRange
+          expectedInletTempRange
+          expectedOutletTempRange
+        }
       }
       powerController {
         managementMetadata {
