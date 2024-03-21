@@ -1,14 +1,15 @@
 export function removeKeys(obj: any, keys: string[]): any {
   const objCopy = { ...obj };
-  function innerRemoveKeys(obj: any, keys: string[]) {
+  function innerRemoveKeys(obj: any, keys: string[]): any {
     return obj !== Object(obj)
       ? obj
       : Array.isArray(obj)
-      ? obj.map((item) => removeKeys(item, keys))
+      ? obj.map((item) => innerRemoveKeys(item, keys))
       : Object.keys(obj)
           .filter((k) => !keys.includes(k))
           .reduce(
-            (acc, x) => Object.assign(acc, { [x]: removeKeys(obj[x], keys) }),
+            (acc, x) =>
+              Object.assign(acc, { [x]: innerRemoveKeys(obj[x], keys) }),
             {}
           );
   }
