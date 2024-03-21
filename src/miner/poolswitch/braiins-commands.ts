@@ -121,8 +121,15 @@ export async function verifyBraiinsTemperature(
           minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
           stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
-        expectedTemperature within miner - ${hostedMiner}
-        malfunctioning chip temperatures: ${tempMalfunctioningChips}. 
+        expectedInletTemp for miner - ${JSON.stringify(
+          hostedMiner.miner.operationDetails.expectedInletTempRange
+        )}
+        expectedOutletTemp for miner - ${JSON.stringify(
+          hostedMiner.miner.operationDetails.expectedOutletTempRange
+        )}
+        malfunctioning chip temperatures: ${JSON.stringify(
+          tempMalfunctioningChips
+        )}. 
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
         });
       }
