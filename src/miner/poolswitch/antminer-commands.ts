@@ -136,16 +136,27 @@ function verifyLivePoolStatus(
       url: `http://${verifyPoolParams.hostedMiner.ipAddress}/cgi-bin/pools.cgi`,
     }).then((resp: any) => {
       const currentPoolInfo = resp.data["POOLS"][0];
+      const expectedUrl = constructPoolUrl(verifyPoolParams.pool);
+      const expectedUser = constructPoolUser(verifyPoolParams);
       if (
         !(
-          currentPoolInfo.url == constructPoolUrl(verifyPoolParams.pool) &&
-          currentPoolInfo.user == constructPoolUser(verifyPoolParams) &&
+          currentPoolInfo.url == expectedUrl &&
+          currentPoolInfo.user == expectedUser &&
           currentPoolInfo.status == "Alive" &&
           currentPoolInfo.priority == 0
         )
       ) {
-        throw Error(`Bitmain miner pool update has not taken effect.
-        Please check miner: ${JSON.stringify(verifyPoolParams)}`);
+        throw Error(
+          `Bitmain miner pool does not match expectations.
+          Expected v. Actual:
+            ${currentPoolInfo.url} - ${expectedUrl}
+            ${currentPoolInfo.user} - ${expectedUser}
+            ${currentPoolInfo.status} - Alive
+            ${currentPoolInfo.priority} - 0
+          Please check miner:
+            ${verifyPoolParams.hostedMiner.ipAddress}
+            ${verifyPoolParams.hostedMiner.friendlyMinerId} `
+        );
       }
     });
   };
