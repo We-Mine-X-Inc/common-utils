@@ -148,7 +148,7 @@ function verifyLivePoolStatus(
       ) {
         throw Error(
           `Bitmain miner pool does not match expectations.
-          Expected v. Actual:
+          Actual v. Expected:
             ${currentPoolInfo.url} - ${expectedUrl}
             ${currentPoolInfo.user} - ${expectedUser}
             ${currentPoolInfo.status} - Alive
@@ -217,7 +217,6 @@ export async function verifyAntminerPool(
     .then(verifyMinerIsForClient(params))
     .then(getMinerConfig(params))
     .then(verifyLivePoolStatus(params))
-    .then(() => verifyAntminerHashRate(params.hostedMiner))
     .then(() => POOL_STATUS_HEALTHY_MSG)
     .catch((e) => {
       const error = `${POOL_VERIFICATION_FAILURE_PREFIX} 

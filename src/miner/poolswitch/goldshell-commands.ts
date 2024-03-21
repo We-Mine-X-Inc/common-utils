@@ -200,7 +200,7 @@ export async function verifyGoldshellPool(
     .then(getSettings)
     .then(verifyMinerIsForClient(params))
     .then(verifyLivePoolStatus(params))
-    .then(() => verifyGoldshellHashRate(params.hostedMiner))
+    .then(() => POOL_STATUS_HEALTHY_MSG)
     .catch((e) => {
       const error = `${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for an Goldshell: ${JSON.stringify(
@@ -225,18 +225,30 @@ function verifyLivePoolStatus(
       headers: getRequestHeaders(sessionInfo.authToken),
     }).then((res) => {
       const currentPoolInfo = res.data[0];
+      const expectedUrl = constructPoolUrl(verifyPoolParams.pool);
+      const expectedUser = constructPoolUser(verifyPoolParams);
+
       if (
         !(
-          currentPoolInfo.url == constructPoolUrl(verifyPoolParams.pool) &&
-          currentPoolInfo.user == constructPoolUser(verifyPoolParams) &&
+          currentPoolInfo.url == expectedUrl &&
+          currentPoolInfo.user == expectedUser &&
           currentPoolInfo.active &&
           currentPoolInfo["pool-priority"] == 0
         )
       ) {
         return Promise.reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-          stackTrace: Error(`Goldshell miner pool update has not taken effect.
-        Please check miner: ${JSON.stringify(verifyPoolParams)}`),
+          stackTrace: Error(
+            `Goldshell miner pool does not match expectations.
+            Actual v. Expected:
+              ${currentPoolInfo.url} - ${expectedUrl}
+              ${currentPoolInfo.user} - ${expectedUser}
+              ${currentPoolInfo.active} - true
+              ${currentPoolInfo["pool-priority"]} - 0
+            Please check miner:
+              ${verifyPoolParams.hostedMiner.ipAddress}
+              ${verifyPoolParams.hostedMiner.friendlyMinerId} `
+          ),
         });
       }
 
