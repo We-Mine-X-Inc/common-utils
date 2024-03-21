@@ -39,7 +39,7 @@ export function getHostedMinerById({
           }
         }
         operationDetails {
-          expectedHashrateRange {
+          expectedHashRateRange {
             minimum
             maximum
           }
