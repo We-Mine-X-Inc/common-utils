@@ -16,11 +16,16 @@ export function removeKeys(
 }
 
 export function removeNestedNullUndefined(obj: any) {
-  for (const key in obj) {
-    if (obj[key] === null || obj[key] === undefined) {
-      delete obj[key];
-    } else if (typeof obj[key] === "object") {
-      removeNestedNullUndefined(obj[key]);
+  const objCopy = { ...obj };
+  function innerRemoveNestedNullUnfedined(obj: any) {
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined) {
+        delete obj[key];
+      } else if (typeof obj[key] === "object") {
+        removeNestedNullUndefined(obj[key]);
+      }
     }
   }
+  innerRemoveNestedNullUnfedined(objCopy);
+  return objCopy;
 }
