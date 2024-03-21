@@ -314,7 +314,7 @@ export async function verifyGoldshellFanSpeed(
   }).then((res) => {
     const chipStats = res.data["data"];
     const minerFanSpeeds = chipStats.flatMap((chipStat: any) =>
-      chipStat["fanspeed"].match(NUMBERS_ONLY_REGEX)
+      parseInt(chipStat["fanspeed"].match(NUMBERS_ONLY_REGEX))
     );
     const malfunctioningFans = minerFanSpeeds.filter((fanSpeed: number) => {
       return !isFanSpeedWithinBounds({
@@ -328,7 +328,9 @@ export async function verifyGoldshellFanSpeed(
         minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
         stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
           Fan speeds are concerning and not within the expected bounds: 
-            expectedTemperature within miner - ${hostedMiner}
+            expectedFansSpeeds for miner - ${JSON.stringify(
+              hostedMiner.miner.operationDetails.expectedFanSpeedRange
+            )}
             malfunctioning fan speeds: ${malfunctioningFans}. 
             Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
       });
