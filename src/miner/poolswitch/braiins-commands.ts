@@ -25,8 +25,8 @@ import { constructPoolUser } from "../pool-user";
 const { exec } = require("child_process");
 
 const SUMMARY_FIELD = "SUMMARY";
-const MEGA_HASH_WITHIN_5_SECS = "MHS 5S";
-const MEGA_HASH_WITHIN_15_MINS = "MHS 5S";
+const MEGA_HASH_WITHIN_5_SECS = "MHS 5s";
+const MEGA_HASH_WITHIN_15_MINS = "MHS 15m";
 const MEGA_HASH_AVG = "MHS av";
 
 export async function verifyBraiinsHashRate(
