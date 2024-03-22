@@ -24,6 +24,11 @@ import {
 import { constructPoolUser } from "../pool-user";
 const { exec } = require("child_process");
 
+const SUMMARY_FIELD = "SUMMARY";
+const MEGA_HASH_WITHIN_5_SECS = "MHS 5S";
+const MEGA_HASH_WITHIN_15_MINS = "MHS 5S";
+const MEGA_HASH_AVG = "MHS av";
+
 export async function verifyBraiinsHashRate(
   hostedMiner: HostedMinerInflated
 ): Promise<MinerCommandResolution> {
@@ -31,10 +36,10 @@ export async function verifyBraiinsHashRate(
     const minerIP = hostedMiner.ipAddress;
     const getSummaryCommand = `echo '{"command":"summary"}' | nc ${minerIP} 4028 | jq .`;
     exec(getSummaryCommand, (error: any, stdout: any, stderr: any) => {
-      const minerStats = JSON.parse(stdout);
-      const hashRate5Secs = minerStats["MHS 5s"];
-      const hashRate15Mins = minerStats["MHS 15m"];
-      const hashRateAvg = minerStats["MHS avg"];
+      const minerStats = JSON.parse(stdout)[SUMMARY_FIELD][0];
+      const hashRate5Secs = minerStats[MEGA_HASH_WITHIN_5_SECS];
+      const hashRate15Mins = minerStats[MEGA_HASH_WITHIN_15_MINS];
+      const hashRateAvg = minerStats[MEGA_HASH_AVG];
       if (
         !(
           isHashRateWithinBounds({
