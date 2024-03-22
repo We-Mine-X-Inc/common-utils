@@ -158,7 +158,8 @@ export async function verifyBraiinsPool(
       const poolConfiguration = JSON.parse(stdout)["POOLS"][0];
       const currPoolUser = poolConfiguration["User"];
       const currPoolStatus = poolConfiguration["Status"];
-      if (currPoolUser == params.pool.username && currPoolStatus == "Alive") {
+      const expectedPoolUser = constructPoolUser(params);
+      if (currPoolUser == expectedPoolUser && currPoolStatus == "Alive") {
         resolve(POOL_STATUS_HEALTHY_MSG);
       }
 
@@ -167,7 +168,7 @@ export async function verifyBraiinsPool(
         stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for Braiins.
         Expected: ${JSON.stringify({
-          username: params.pool.username,
+          username: expectedPoolUser,
           status: "Alive",
         })}.
         Active Config: ${JSON.stringify({
