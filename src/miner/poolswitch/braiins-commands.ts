@@ -173,8 +173,7 @@ export async function verifyBraiinsPool(
         Active Config: ${JSON.stringify({
           username: currPoolUser,
           status: currPoolStatus,
-        })}
-        Will reboot the miner and try again.`),
+        })}.`),
       });
     });
   });
