@@ -115,7 +115,7 @@ export async function verifyBraiinsTemperature(
       const minerTempStats = JSON.parse(stdout)["TEMPS"];
       const tempMalfunctioningBoards = minerTempStats.filter(
         (tempStats: any) => {
-          return isOutletTempWithinBounds({
+          return !isOutletTempWithinBounds({
             hostedMiner: hostedMiner,
             actualTemperature: tempStats["Board"],
           });
