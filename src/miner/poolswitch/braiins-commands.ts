@@ -113,15 +113,15 @@ export async function verifyBraiinsTemperature(
     const getTempStatsCommand = `echo '{"command":"temps"}' | nc ${minerIP} 4028 | jq .`;
     exec(getTempStatsCommand, (error: any, stdout: any, stderr: any) => {
       const minerTempStats = JSON.parse(stdout)["TEMPS"];
-      const tempMalfunctioningChips = minerTempStats.filter(
+      const tempMalfunctioningBoards = minerTempStats.filter(
         (tempStats: any) => {
           return isOutletTempWithinBounds({
             hostedMiner: hostedMiner,
-            actualTemperature: tempStats["Chip"],
+            actualTemperature: tempStats["Board"],
           });
         }
       );
-      if (tempMalfunctioningChips.length > 0) {
+      if (tempMalfunctioningBoards.length > 0) {
         reject({
           minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
           stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
@@ -133,7 +133,7 @@ export async function verifyBraiinsTemperature(
           hostedMiner.miner.operationDetails.expectedOutletTempRange
         )}
         malfunctioning chip temperatures: ${JSON.stringify(
-          tempMalfunctioningChips
+          tempMalfunctioningBoards
         )}. 
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
         });
