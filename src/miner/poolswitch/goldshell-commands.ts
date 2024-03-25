@@ -238,8 +238,7 @@ function verifyLivePoolStatus(
       ) {
         return Promise.reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-          stackTrace: Error(
-            `Goldshell miner pool does not match expectations.
+          stackTrace: `Goldshell miner pool does not match expectations.
             Actual v. Expected:
               ${currentPoolInfo.url} - ${expectedUrl}
               ${currentPoolInfo.user} - ${expectedUser}
@@ -247,8 +246,7 @@ function verifyLivePoolStatus(
               ${currentPoolInfo["pool-priority"]} - 0
             Please check miner:
               ${verifyPoolParams.hostedMiner.ipAddress}
-              ${verifyPoolParams.hostedMiner.friendlyMinerId} `
-          ),
+              ${verifyPoolParams.hostedMiner.friendlyMinerId}`,
         });
       }
 
@@ -289,12 +287,12 @@ export async function verifyGoldshellHashRate(
 
       return Promise.reject({
         minerErrorType: MinerErrorType.HASH_RATE_ERROR,
-        stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX} 
+        stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX} 
           HashRate not within the expected bounds: 
             miner --> ${hostedMiner}
             expectedHashRate --> ${expectedHashRateRange}
             actualHashRate -> ${actualHashRate}.
-            Please check miner: ${JSON.stringify(ipAddress)}`),
+            Please check miner: ${JSON.stringify(ipAddress)}`,
       });
     }
 
@@ -326,13 +324,13 @@ export async function verifyGoldshellFanSpeed(
     if (malfunctioningFans.length > 0) {
       return Promise.reject({
         minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
-        stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+        stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
           Fan speeds are concerning and not within the expected bounds: 
             expectedFansSpeeds for miner - ${JSON.stringify(
               hostedMiner.miner.operationDetails.expectedFanSpeedRange
             )}
             malfunctioning fan speeds: ${malfunctioningFans}. 
-            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
       });
     }
 
@@ -363,7 +361,7 @@ export async function verifyGoldshellTemperature(
     if (tempMalfunctioningChips.length > 0) {
       return Promise.reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+        stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
           Temperatures are concerning and not within the expected bounds: 
             expectedInletTemp for miner - ${JSON.stringify(
               hostedMiner.miner.operationDetails.expectedInletTempRange
@@ -374,7 +372,7 @@ export async function verifyGoldshellTemperature(
             malfunctioning chip temperatures: ${JSON.stringify(
               tempMalfunctioningChips
             )}.  
-            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
       });
     }
 

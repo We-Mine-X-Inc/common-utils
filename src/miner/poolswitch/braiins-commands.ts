@@ -58,7 +58,7 @@ export async function verifyBraiinsHashRate(
       ) {
         reject({
           minerErrorType: MinerErrorType.HASH_RATE_ERROR,
-          stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
+          stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX}
           HashRate not within the expected bounds: 
             expectedHashRate for miner - ${JSON.stringify(
               hostedMiner.miner.operationDetails.expectedHashRateRange
@@ -66,7 +66,7 @@ export async function verifyBraiinsHashRate(
             MHS 5s actualHashRate - ${hashRate5Secs}
             MHS 15m actualHashRate - ${hashRate15Mins}
             MHS avg actualHashRate - ${hashRateAvg}.
-            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
       }
       resolve(MINER_HASHRATE_HEALTHY_MSG);
@@ -91,13 +91,13 @@ export async function verifyBraiinsFanSpeed(
       if (malfunctioningFans.length > 0) {
         reject({
           minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
-          stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+          stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
       Fan speeds are concerning and not within the expected bounds: 
         expectedFansSpeeds for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedFanSpeedRange
         )}
         malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
       }
       resolve(MINER_FAN_SPEED_HEALTHY_MSG);
@@ -124,7 +124,7 @@ export async function verifyBraiinsTemperature(
       if (tempMalfunctioningBoards.length > 0) {
         reject({
           minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
-          stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+          stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
         expectedOutletTemp (Board) for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedOutletTempRange
@@ -132,7 +132,7 @@ export async function verifyBraiinsTemperature(
         malfunctioning board temperatures: ${JSON.stringify(
           tempMalfunctioningBoards
         )}. 
-        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
       }
       resolve(MINER_TEMPERATURE_HEALTHY_MSG);
@@ -150,10 +150,10 @@ export async function verifyBraiinsPool(
       if (error) {
         reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-          stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX}
+          stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX}
           Failed to verify the mining pool for Braiins.
           
-          Error msg: ${error}.`),
+          Error msg: ${error}.`,
         });
       }
 
@@ -167,7 +167,7 @@ export async function verifyBraiinsPool(
 
       reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: Error(`${POOL_VERIFICATION_FAILURE_PREFIX} 
+        stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX} 
         Failed to verify the mining pool for Braiins.
         Expected: ${JSON.stringify({
           username: expectedPoolUser,
@@ -176,7 +176,7 @@ export async function verifyBraiinsPool(
         Active Config: ${JSON.stringify({
           username: currPoolUser,
           status: currPoolStatus,
-        })}.`),
+        })}.`,
       });
     });
   });
@@ -233,9 +233,9 @@ async function removePool(params: SwitchPoolParams) {
       if (error || stderr) {
         reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-          stackTrace: Error(`Failed to remove pool. 
-        Error: ${error}.
-        Stderr: ${stderr}.`),
+          stackTrace: `Failed to remove pool. 
+            Error: ${error}.
+            Stderr: ${stderr}.`,
         });
       }
     });
@@ -256,9 +256,9 @@ async function addPool(params: SwitchPoolParams) {
       if (error || stderr) {
         reject({
           minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-          stackTrace: Error(`Failed to remove pool. 
-          Error: ${error}.
-          Stderr: ${stderr}.`),
+          stackTrace: `Failed to remove pool. 
+            Error: ${error}.
+            Stderr: ${stderr}.`,
         });
       }
     });

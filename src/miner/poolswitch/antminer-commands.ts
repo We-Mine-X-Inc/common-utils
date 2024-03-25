@@ -259,7 +259,7 @@ export async function verifyAntminerHashRate(
     ) {
       return Promise.reject({
         minerErrorType: MinerErrorType.HASH_RATE_ERROR,
-        stackTrace: Error(`${MINER_HASHRATE_FAILURE_PREFIX}
+        stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX}
       HashRate not within the expected bounds: 
         expectedHashRate for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedHashRateRange
@@ -267,7 +267,7 @@ export async function verifyAntminerHashRate(
         rate_5s actualHashRate - ${minerStats["rate_5s"]}
         rate_30m actualHashRate - ${minerStats["rate_30m"]}
         rate_avg actualHashRate - ${minerStats["rate_avg"]}.
-        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
       });
     }
 
@@ -293,13 +293,13 @@ export async function verifyAntminerFanSpeed(
     if (malfunctioningFans.length > 0) {
       return Promise.reject({
         minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
-        stackTrace: Error(`${MINER_FAN_SPEED_FAILURE_PREFIX}
+        stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
       Fan speeds are concerning and not within the expected bounds: 
         expectedFansSpeeds for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedFanSpeedRange
         )}
         malfunctioning fan speeds: ${malfunctioningFans}. 
-        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
       });
     }
 
@@ -340,7 +340,7 @@ export async function verifyAntminerTemperature(
     if (tempMalfunctioningChips.length > 0) {
       return Promise.reject({
         minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
-        stackTrace: Error(`${MINER_TEMPERATURE_FAILURE_PREFIX}
+        stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
         expectedInletTemp for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedInletTempRange
@@ -351,7 +351,7 @@ export async function verifyAntminerTemperature(
         malfunctioning chip temperatures: ${JSON.stringify(
           tempMalfunctioningChips
         )}. 
-        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`),
+        Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
       });
     }
 
