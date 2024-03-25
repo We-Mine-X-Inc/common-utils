@@ -29,6 +29,7 @@ export function getHostedMiners({
         networkStatus
         poolIsBeingSwitched
         isFarmManaged
+        operatingError
       }
       miner {
         marketDetails {
