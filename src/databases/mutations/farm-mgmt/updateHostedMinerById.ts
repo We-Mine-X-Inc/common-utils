@@ -34,6 +34,8 @@ export function updateHostedMinerById({
         lastOnlineDate
         networkStatus
         poolIsBeingSwitched
+        isFarmManaged
+        operatingError
       }
     }
   }
