@@ -24,6 +24,7 @@ export function getMiningWorkByTimeSpanQuery({
 		    hostedMinerByFriendlyId {
           _id
           ipAddress
+          owner
           miner {
             marketDetails {
               coin {
