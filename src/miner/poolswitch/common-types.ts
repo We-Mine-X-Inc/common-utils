@@ -1,17 +1,17 @@
 import {
   HostedMiner,
-  HostedMinerInflated,
+  HostedMinerHydrated,
   MinerErrorType,
   Pool,
 } from "wemine-apis";
 
 export type SwitchPoolParams = {
-  hostedMiner: HostedMiner | HostedMinerInflated;
+  hostedMiner: HostedMiner | HostedMinerHydrated;
   pool: Pool;
 };
 
 export type VerifyOperationsParams = {
-  hostedMiner: HostedMinerInflated;
+  hostedMiner: HostedMinerHydrated;
   pool: Pool;
 };
 

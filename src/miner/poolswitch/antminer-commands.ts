@@ -5,7 +5,7 @@ import {
   VerifyOperationsParams,
 } from "./common-types";
 // import { format as prettyFormat } from "pretty-format";
-import { HostedMinerInflated, MinerErrorType, Pool } from "wemine-apis";
+import { HostedMinerHydrated, MinerErrorType, Pool } from "wemine-apis";
 
 import {
   isFanSpeedWithinBounds,
@@ -233,7 +233,7 @@ export async function verifyAntminerPool(
 }
 
 export async function verifyAntminerHashRate(
-  hostedMiner: HostedMinerInflated
+  hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
@@ -276,7 +276,7 @@ export async function verifyAntminerHashRate(
 }
 
 export async function verifyAntminerFanSpeed(
-  hostedMiner: HostedMinerInflated
+  hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },
@@ -308,7 +308,7 @@ export async function verifyAntminerFanSpeed(
 }
 
 export async function verifyAntminerTemperature(
-  hostedMiner: HostedMinerInflated
+  hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   return await ANTMINER_DIGESTAUTH.request({
     headers: { Accept: "application/json" },

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { HostedMinerInflated, MinerErrorType } from "wemine-apis";
+import { HostedMinerHydrated, MinerErrorType } from "wemine-apis";
 import {
   MinerCommandResolution,
   SwitchPoolParams,
@@ -30,7 +30,7 @@ const MEGA_HASH_WITHIN_15_MINS = "MHS 15m";
 const MEGA_HASH_AVG = "MHS av";
 
 export async function verifyBraiinsHashRate(
-  hostedMiner: HostedMinerInflated
+  hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = hostedMiner.ipAddress;
@@ -75,7 +75,7 @@ export async function verifyBraiinsHashRate(
 }
 
 export async function verifyBraiinsFanSpeed(
-  hostedMiner: HostedMinerInflated
+  hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = hostedMiner.ipAddress;
@@ -106,7 +106,7 @@ export async function verifyBraiinsFanSpeed(
 }
 
 export async function verifyBraiinsTemperature(
-  hostedMiner: HostedMinerInflated
+  hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   return new Promise((resolve, reject) => {
     const minerIP = hostedMiner.ipAddress;

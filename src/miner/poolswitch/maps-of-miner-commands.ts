@@ -1,4 +1,4 @@
-import { HostedMinerInflated, MinerApiType } from "wemine-apis";
+import { HostedMinerHydrated, MinerApiType } from "wemine-apis";
 import {
   rebootAntminerMiner,
   switchAntminerPool,
@@ -62,7 +62,7 @@ export const REBOOT_MINER_FUNCTION: Record<
 
 export const HASHRATE_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMinerInflated) => Promise<MinerCommandResolution>
+  (hostedMiner: HostedMinerHydrated) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerHashRate,
   [MinerApiType.ANTMINER]: verifyAntminerHashRate,
@@ -72,7 +72,7 @@ export const HASHRATE_VERIFICATION_FUNCTION: Record<
 
 export const FAN_SPEED_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMinerInflated) => Promise<MinerCommandResolution>
+  (hostedMiner: HostedMinerHydrated) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerFanSpeed,
   [MinerApiType.ANTMINER]: verifyAntminerFanSpeed,
@@ -82,7 +82,7 @@ export const FAN_SPEED_VERIFICATION_FUNCTION: Record<
 
 export const TEMPERATURE_VERIFICATION_FUNCTION: Record<
   MinerApiType,
-  (hostedMiner: HostedMinerInflated) => Promise<MinerCommandResolution>
+  (hostedMiner: HostedMinerHydrated) => Promise<MinerCommandResolution>
 > = {
   [MinerApiType.UNKNOWN]: verifyUnknownMinerTemperature,
   [MinerApiType.ANTMINER]: verifyAntminerTemperature,
@@ -109,19 +109,19 @@ async function rebootUnknownMiner(
 }
 
 async function verifyUnknownMinerHashRate(
-  miner: HostedMinerInflated
+  miner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
 
 async function verifyUnknownMinerFanSpeed(
-  miner: HostedMinerInflated
+  miner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }
 
 async function verifyUnknownMinerTemperature(
-  miner: HostedMinerInflated
+  miner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
   throw Error(`Invalid Miner API supplied. Params: ${prettyFormat(miner)}`);
 }

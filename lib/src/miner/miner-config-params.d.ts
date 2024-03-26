@@ -1,6 +1,6 @@
-import { HostedMiner, HostedMinerInflated, Pool } from "wemine-apis";
+import { HostedMiner, HostedMinerHydrated, Pool } from "wemine-apis";
 export type HostedMinerConfigParams = {
-    hostedMiner: HostedMiner | HostedMinerInflated;
+    hostedMiner: HostedMiner | HostedMinerHydrated;
     pool: Pool;
 };
 //# sourceMappingURL=miner-config-params.d.ts.map

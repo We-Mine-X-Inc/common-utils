@@ -1,7 +1,7 @@
-import { HostedMinerInflated, assertMiner } from "wemine-apis";
+import { HostedMinerHydrated, assertMiner } from "wemine-apis";
 
 export function isHashRateWithinBounds(params: {
-  hostedMiner: HostedMinerInflated;
+  hostedMiner: HostedMinerHydrated;
   actualHashRate: number;
 }) {
   const miner = params.hostedMiner.miner;
@@ -16,7 +16,7 @@ export function isHashRateWithinBounds(params: {
 }
 
 export function isFanSpeedWithinBounds(params: {
-  hostedMiner: HostedMinerInflated;
+  hostedMiner: HostedMinerHydrated;
   actualFanSpeed: number;
 }) {
   const miner = params.hostedMiner.miner;
@@ -31,7 +31,7 @@ export function isFanSpeedWithinBounds(params: {
 }
 
 export function isInletTempWithinBounds(params: {
-  hostedMiner: HostedMinerInflated;
+  hostedMiner: HostedMinerHydrated;
   actualTemperature: number;
 }) {
   const miner = params.hostedMiner.miner;
@@ -46,7 +46,7 @@ export function isInletTempWithinBounds(params: {
 }
 
 export function isOutletTempWithinBounds(params: {
-  hostedMiner: HostedMinerInflated;
+  hostedMiner: HostedMinerHydrated;
   actualTemperature: number;
 }) {
   const miner = params.hostedMiner.miner;
