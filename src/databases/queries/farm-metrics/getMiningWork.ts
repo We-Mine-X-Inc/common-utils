@@ -21,20 +21,8 @@ export function getMiningWorkByTimeSpanQuery({
   query {
   ${schemaName}(query: ${compatibleQuery}, limit: ${MIN_LIMIT_OF_WORK_RECORDS}, sortBy: TIME_ASC) {
         hashRate
-		    hostedMinerByFriendlyId {
-          _id
-          ipAddress
-          miner {
-            marketDetails {
-              coin {
-                coinType
-              }
-            }
-          }
-        }
-		    poolByFriendlyId {
-          username
-        }
+		    hostedMinerByFriendlyId
+		    poolByFriendlyId
 		    time
 		    totalEnergyConsumption
         isOnline
