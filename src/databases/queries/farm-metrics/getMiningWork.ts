@@ -40,7 +40,7 @@ export function getMiningWorkByTimeSpanQuery({
         }
 		    time
 		    totalEnergyConsumption
-        isOnline
+        isOperational
     }
   }`;
 }
