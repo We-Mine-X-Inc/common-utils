@@ -21,8 +21,12 @@ export function getMiningWorkByTimeSpanQuery({
   query {
   ${schemaName}(query: ${compatibleQuery}, limit: ${MIN_LIMIT_OF_WORK_RECORDS}, sortBy: TIME_ASC) {
         hashRate
+        time
+		    totalEnergyConsumption
+        isOperational
 		    hostedMinerByFriendlyId {
           _id
+          friendlyMinerId
           ipAddress
           owner {
             email
@@ -38,9 +42,6 @@ export function getMiningWorkByTimeSpanQuery({
 		    poolByFriendlyId {
           username
         }
-		    time
-		    totalEnergyConsumption
-        isOperational
     }
   }`;
 }
