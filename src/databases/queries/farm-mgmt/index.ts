@@ -7,3 +7,4 @@ export * from "./getCustomers";
 export * from "./getPoolById";
 export * from "./getPools";
 export * from "./getFacilityInfos";
+export * from "./getFacilityMaintenanceJobs";

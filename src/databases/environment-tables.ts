@@ -78,6 +78,17 @@ export function getFacilityInfoGraphSchemaName(
   });
 }
 
+export function getFacilityMaintenanceJobGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tablePrefix: "facilitymaintenancejob",
+    env,
+    schemaOptions,
+  });
+}
+
 function getTableGraphSchemaName({
   tablePrefix,
   env,
