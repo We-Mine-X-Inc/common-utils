@@ -6,3 +6,4 @@ export * from "./getCustomerById";
 export * from "./getCustomers";
 export * from "./getPoolById";
 export * from "./getPools";
+export * from "./getFacilityInfos";

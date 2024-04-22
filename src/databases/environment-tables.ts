@@ -67,6 +67,17 @@ export function getMinerErrorGraphSchemaName(
   });
 }
 
+export function getFacilityInfoGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tablePrefix: "facilityinfo",
+    env,
+    schemaOptions,
+  });
+}
+
 function getTableGraphSchemaName({
   tablePrefix,
   env,
