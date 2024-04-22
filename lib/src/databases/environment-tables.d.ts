@@ -9,5 +9,6 @@ export declare function getHostedMinerGraphSchemaName(env: Environment, schemaOp
 export declare function getPoolGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getMiningWorkGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getMinerErrorGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getFacilityInfoGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export {};
 //# sourceMappingURL=environment-tables.d.ts.map
