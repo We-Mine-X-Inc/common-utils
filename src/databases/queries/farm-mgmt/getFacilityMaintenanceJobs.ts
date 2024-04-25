@@ -19,9 +19,10 @@ export function getFacilityMaintenanceJobs({
   return gql`
   query {
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_FACILITY_IDS}) {
-        reminderFreqToReinitAutoMgmt
-        startTime
-        endTime
+      _id  
+      startTime
+      endTime
+      durationBetweenInquiryPrompt
     }
   }`;
 }

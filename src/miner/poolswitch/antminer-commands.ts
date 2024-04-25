@@ -4,7 +4,6 @@ import {
   SwitchPoolParams,
   VerifyOperationsParams,
 } from "./common-types";
-// import { format as prettyFormat } from "pretty-format";
 import { HostedMinerHydrated, MinerErrorType, Pool } from "wemine-apis";
 
 import {
