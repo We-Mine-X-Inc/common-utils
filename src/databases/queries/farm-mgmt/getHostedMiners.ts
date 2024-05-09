@@ -18,7 +18,7 @@ export function getHostedMiners({
   const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
   query {
-    ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_MINER_IDS}) {
+    ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_MINER_IDS}, sortBy: FRIENDLYMINERID_ASC) {
       _id
       API
       ipAddress
