@@ -1,6 +1,9 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
-import { getPoolGraphSchemaName } from "../../environment-tables";
+import {
+  OperationType,
+  getPoolGraphSchemaName,
+} from "../../environment-tables";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 export function getPools({
@@ -11,6 +14,7 @@ export function getPools({
   query: Omit<any, "_id">;
 }) {
   const schemaName = getPoolGraphSchemaName(env, {
+    operationType: OperationType.FETCH,
     forManyDocuments: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);

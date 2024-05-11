@@ -1,5 +1,13 @@
 import { Environment } from "wemine-apis";
+export declare enum OperationType {
+    UNKNOWN = 0,
+    FETCH = 1,
+    UPDATE = 2,
+    INSERT = 3,
+    DELETE = 4
+}
 type SchemaOptions = {
+    operationType: OperationType;
     forManyDocuments?: boolean;
     embeddedInFunction?: boolean;
 };

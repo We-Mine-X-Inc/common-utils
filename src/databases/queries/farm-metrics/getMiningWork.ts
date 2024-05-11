@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
-import { getMiningWorkGraphSchemaName } from "../../environment-tables";
+import {
+  OperationType,
+  getMiningWorkGraphSchemaName,
+} from "../../environment-tables";
 import { Environment } from "wemine-apis";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
@@ -14,6 +17,7 @@ export function getMiningWorkByTimeSpanQuery({
   query: Omit<any, "_id">;
 }) {
   const schemaName = getMiningWorkGraphSchemaName(env, {
+    operationType: OperationType.FETCH,
     forManyDocuments: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);

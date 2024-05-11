@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client/core";
-import { getCustomerGraphSchemaName } from "../../environment-tables";
+import {
+  OperationType,
+  getCustomerGraphSchemaName,
+} from "../../environment-tables";
 import { Environment } from "wemine-apis";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
@@ -13,6 +16,7 @@ export function getCustomers({
   query: Omit<any, "_id">;
 }) {
   const schemaName = getCustomerGraphSchemaName(env, {
+    operationType: OperationType.FETCH,
     forManyDocuments: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);

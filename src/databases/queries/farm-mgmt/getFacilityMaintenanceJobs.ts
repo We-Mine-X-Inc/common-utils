@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client/core";
-import { getFacilityMaintenanceJobGraphSchemaName } from "../../environment-tables";
+import {
+  OperationType,
+  getFacilityMaintenanceJobGraphSchemaName,
+} from "../../environment-tables";
 import { Environment } from "wemine-apis";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
@@ -13,6 +16,7 @@ export function getFacilityMaintenanceJobs({
   query: Omit<any, "_id">;
 }) {
   const schemaName = getFacilityMaintenanceJobGraphSchemaName(env, {
+    operationType: OperationType.FETCH,
     forManyDocuments: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);

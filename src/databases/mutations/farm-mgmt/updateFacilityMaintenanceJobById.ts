@@ -1,6 +1,9 @@
 import { gql } from "@apollo/client";
 import { Environment } from "wemine-apis";
-import { getFacilityMaintenanceJobGraphSchemaName } from "../../environment-tables";
+import {
+  OperationType,
+  getFacilityMaintenanceJobGraphSchemaName,
+} from "../../environment-tables";
 import { IdQuery } from "../../queries/id-query";
 import { UpdateDataObject } from "../update-data-obj";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
@@ -16,6 +19,7 @@ export function updateFacilityMaintenanceJobById({
   updatedProperties: UpdateDataObject;
 }) {
   const schemaName = getFacilityMaintenanceJobGraphSchemaName(env, {
+    operationType: OperationType.UPDATE,
     embeddedInFunction: true,
   });
   const compatibleQuery = makeGraphQLInputCompatible(query);
@@ -24,7 +28,7 @@ export function updateFacilityMaintenanceJobById({
   );
   return gql`
   mutation {
-    updateOne${schemaName}(query: ${compatibleQuery}, set: ${compatibleMutation}) {
+    ${schemaName}(query: ${compatibleQuery}, set: ${compatibleMutation}) {
         _id
         startTime
         endTime

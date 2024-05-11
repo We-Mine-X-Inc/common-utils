@@ -1,6 +1,15 @@
 import { Environment } from "wemine-apis";
 
+export enum OperationType {
+  UNKNOWN = 0,
+  FETCH = 1,
+  UPDATE = 2,
+  INSERT = 3,
+  DELETE = 4,
+}
+
 type SchemaOptions = {
+  operationType: OperationType;
   forManyDocuments?: boolean;
   embeddedInFunction?: boolean;
 };
@@ -10,7 +19,7 @@ export function getHostingContractGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "hostingcontract",
+    tableName: "hostingcontract",
     env,
     schemaOptions,
   });
@@ -21,7 +30,7 @@ export function getCustomerGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "customer",
+    tableName: "customer",
     env,
     schemaOptions,
   });
@@ -32,7 +41,7 @@ export function getHostedMinerGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "hostedminer",
+    tableName: "hostedminer",
     env,
     schemaOptions,
   });
@@ -42,7 +51,7 @@ export function getPoolGraphSchemaName(
   env: Environment,
   schemaOptions?: SchemaOptions
 ) {
-  return getTableGraphSchemaName({ tablePrefix: "pool", env, schemaOptions });
+  return getTableGraphSchemaName({ tableName: "pool", env, schemaOptions });
 }
 
 export function getMiningWorkGraphSchemaName(
@@ -50,7 +59,7 @@ export function getMiningWorkGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "miningwork",
+    tableName: "miningwork",
     env,
     schemaOptions,
   });
@@ -61,7 +70,7 @@ export function getMinerErrorGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "minererror",
+    tableName: "minererror",
     env,
     schemaOptions,
   });
@@ -72,7 +81,7 @@ export function getFacilityInfoGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "facilityinfo",
+    tableName: "facilityinfo",
     env,
     schemaOptions,
   });
@@ -83,33 +92,49 @@ export function getFacilityMaintenanceJobGraphSchemaName(
   schemaOptions?: SchemaOptions
 ) {
   return getTableGraphSchemaName({
-    tablePrefix: "facilitymaintenancejob",
+    tableName: "facilitymaintenancejob",
     env,
     schemaOptions,
   });
 }
 
 function getTableGraphSchemaName({
-  tablePrefix,
+  tableName: tablePrefix,
   env,
   schemaOptions,
 }: {
-  tablePrefix: string;
+  tableName: string;
   env: Environment;
   schemaOptions?: SchemaOptions | undefined;
 }) {
-  const prefix = schemaOptions?.embeddedInFunction
+  const commandName = schemaOptions ? getCommandName(schemaOptions) : "";
+  const modelName = schemaOptions?.embeddedInFunction
     ? tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)
     : tablePrefix;
   const suffix = schemaOptions?.forManyDocuments ? "s" : "";
   switch (env) {
     case Environment.TEST:
-      return `${prefix}Test${suffix}`;
+      return `${commandName}${modelName}Test${suffix}`;
     case Environment.DEV:
-      return `${prefix}Dev${suffix}`;
+      return `${commandName}${modelName}Dev${suffix}`;
     case Environment.PROD:
-      return `${prefix}Prod${suffix}`;
+      return `${commandName}${modelName}Prod${suffix}`;
     default:
-      return `${prefix}Dev${suffix}`;
+      return `${commandName}${modelName}Dev${suffix}`;
+  }
+}
+
+function getCommandName(schemaOptions: SchemaOptions) {
+  switch (schemaOptions.operationType) {
+    case OperationType.FETCH:
+      return "";
+    case OperationType.INSERT:
+      return schemaOptions.forManyDocuments ? "insertMany" : "insertOne";
+    case OperationType.UPDATE:
+      return schemaOptions.forManyDocuments ? "updateMany" : "updateOne";
+    case OperationType.DELETE:
+      return schemaOptions.forManyDocuments ? "deleteMany" : "deleteOne";
+    default:
+      return "";
   }
 }
