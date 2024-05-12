@@ -17,6 +17,7 @@ export function getFacilityMaintenanceJobById({
   query {
     ${schemaName}(query: ${compatibleQuery}) {
       _id
+      facilityInfo
       startTime
       endTime
       durationBetweenInquiryPrompt
