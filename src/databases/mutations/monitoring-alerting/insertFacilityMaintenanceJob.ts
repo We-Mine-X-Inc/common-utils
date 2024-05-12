@@ -23,7 +23,9 @@ export function insertFacilityMaintenanceJob({
     mutation {
       ${schemaName}(data: ${compatibleMutation}) {
         _id
-        facilityInfo
+        facilityInfo {
+          _id
+        }
         startTime
         endTime
         durationBetweenInquiryPrompt

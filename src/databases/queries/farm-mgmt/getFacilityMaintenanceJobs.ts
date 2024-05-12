@@ -24,7 +24,9 @@ export function getFacilityMaintenanceJobs({
   query {
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_FACILITY_IDS}) {
       _id  
-      facilityInfo
+      facilityInfo {
+        _id
+      }
       startTime
       endTime
       durationBetweenInquiryPrompt
