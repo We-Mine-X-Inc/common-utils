@@ -22,6 +22,7 @@ import {
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
 import { constructPoolUser } from "../pool-user";
+import { jsonSafeParse } from "../../jsconstructs";
 const { exec } = require("child_process");
 
 const SUMMARY_FIELD = "SUMMARY";
@@ -36,7 +37,18 @@ export async function verifyBraiinsHashRate(
     const minerIP = hostedMiner.ipAddress;
     const getSummaryCommand = `echo '{"command":"summary"}' | nc ${minerIP} 4028 | jq .`;
     exec(getSummaryCommand, (error: any, stdout: any, stderr: any) => {
-      const minerStats = JSON.parse(stdout)[SUMMARY_FIELD][0];
+      const parsedStats = jsonSafeParse(stdout)[SUMMARY_FIELD];
+      if (!parsedStats) {
+        reject({
+          minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+          stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX}
+    No miner stats available.
+      Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
+        });
+        return;
+      }
+
+      const minerStats = jsonSafeParse(stdout)[SUMMARY_FIELD][0];
       const hashRate5Secs = minerStats[MEGA_HASH_WITHIN_5_SECS];
       const hashRate15Mins = minerStats[MEGA_HASH_WITHIN_15_MINS];
       const hashRateAvg = minerStats[MEGA_HASH_AVG];
@@ -68,6 +80,7 @@ export async function verifyBraiinsHashRate(
             MHS avg actualHashRate - ${hashRateAvg}.
             Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
+        return;
       }
       resolve(MINER_HASHRATE_HEALTHY_MSG);
     });
@@ -81,7 +94,7 @@ export async function verifyBraiinsFanSpeed(
     const minerIP = hostedMiner.ipAddress;
     const getFanStatsCommand = `echo '{"command":"fans"}' | nc ${minerIP} 4028 | jq .`;
     exec(getFanStatsCommand, (error: any, stdout: any, stderr: any) => {
-      const minerFanStats = JSON.parse(stdout)["FANS"];
+      const minerFanStats = jsonSafeParse(stdout)["FANS"] || [];
       const malfunctioningFans = minerFanStats.filter((fanStats: any) => {
         return !isFanSpeedWithinBounds({
           hostedMiner: hostedMiner,
@@ -96,9 +109,10 @@ export async function verifyBraiinsFanSpeed(
         expectedFansSpeeds for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedFanSpeedRange
         )}
-        malfunctioning fan speeds: ${malfunctioningFans}. 
+        malfunctioning fan speeds: ${malfunctioningFans}. If empty, then no stats were available.
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
+        return;
       }
       resolve(MINER_FAN_SPEED_HEALTHY_MSG);
     });
@@ -112,7 +126,7 @@ export async function verifyBraiinsTemperature(
     const minerIP = hostedMiner.ipAddress;
     const getTempStatsCommand = `echo '{"command":"temps"}' | nc ${minerIP} 4028 | jq .`;
     exec(getTempStatsCommand, (error: any, stdout: any, stderr: any) => {
-      const minerTempStats = JSON.parse(stdout)["TEMPS"];
+      const minerTempStats = jsonSafeParse(stdout)["TEMPS"] || [];
       const tempMalfunctioningBoards = minerTempStats.filter(
         (tempStats: any) => {
           return !isOutletTempWithinBounds({
@@ -131,9 +145,10 @@ export async function verifyBraiinsTemperature(
         )}
         malfunctioning board temperatures: ${JSON.stringify(
           tempMalfunctioningBoards
-        )}. 
+        )}. If empty, then no stats were available.
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
+        return;
       }
       resolve(MINER_TEMPERATURE_HEALTHY_MSG);
     });
@@ -155,14 +170,27 @@ export async function verifyBraiinsPool(
           
           Error msg: ${error}.`,
         });
+        return;
       }
 
-      const poolConfiguration = JSON.parse(stdout)["POOLS"][0];
+      const poolConfigurations = jsonSafeParse(stdout)["POOLS"];
+      if (!poolConfigurations) {
+        reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX}
+          Failed to verify the mining pool for Braiins.
+          Pool configurations were unsuccessfully fetched.`,
+        });
+        return;
+      }
+
+      const poolConfiguration = poolConfigurations[0];
       const currPoolUser = poolConfiguration["User"];
       const currPoolStatus = poolConfiguration["Status"];
       const expectedPoolUser = constructPoolUser(params);
       if (currPoolUser == expectedPoolUser && currPoolStatus == "Alive") {
         resolve(POOL_STATUS_HEALTHY_MSG);
+        return;
       }
 
       reject({
@@ -208,9 +236,10 @@ async function verifyNoSetPool(
     const getPoolsCommand = `echo '{"command":"pools"}' | nc ${minerIP} 4028 | jq .`;
 
     exec(getPoolsCommand, (error: any, stdout: any, stderr: any) => {
-      const poolConfiguration = JSON.parse(stdout)["POOLS"];
+      const poolConfiguration = jsonSafeParse(stdout)["POOLS"] || [];
       if (poolConfiguration.length == 0) {
         resolve("No Pool Is Set");
+        return;
       }
       reject({
         minerErrorType: MinerErrorType.POOL_STATUS_ERROR,

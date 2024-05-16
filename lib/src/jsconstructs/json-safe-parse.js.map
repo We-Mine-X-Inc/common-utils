@@ -1,0 +1,1 @@
+{"version":3,"file":"json-safe-parse.js","sourceRoot":"","sources":["../../../src/jsconstructs/json-safe-parse.ts"],"names":[],"mappings":";;;AAAA,SAAgB,aAAa,CAAC,UAAkB;IAC9C,IAAI;QACF,OAAO,IAAI,CAAC,KAAK,CAAC,UAAU,CAAC,CAAC;KAC/B;IAAC,OAAO,KAAK,EAAE;QACd,OAAO,EAAE,CAAC;KACX;AACH,CAAC;AAND,sCAMC"}
