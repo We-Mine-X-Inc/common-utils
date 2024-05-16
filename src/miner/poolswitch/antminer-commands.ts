@@ -145,18 +145,21 @@ function verifyLivePoolStatus(
           currentPoolInfo.priority == 0
         )
       ) {
-        throw Error(
-          `Bitmain miner pool does not match expectations.
-          Actual v. Expected:
-            ${currentPoolInfo.url} - ${expectedUrl}
-            ${currentPoolInfo.user} - ${expectedUser}
-            ${currentPoolInfo.status} - Alive
-            ${currentPoolInfo.priority} - 0
-          Please check miner:
-            ${verifyPoolParams.hostedMiner.ipAddress}
-            ${verifyPoolParams.hostedMiner.friendlyMinerId} `
-        );
+        return Promise.reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: `${POOL_VERIFICATION_FAILURE_PREFIX} 
+          Bitmain miner pool does not match expectations.
+            Actual v. Expected:
+              ${currentPoolInfo.url} - ${expectedUrl}
+              ${currentPoolInfo.user} - ${expectedUser}
+              ${currentPoolInfo.status} - Alive
+              ${currentPoolInfo.priority} - 0
+            Please check miner:
+              ${verifyPoolParams.hostedMiner.ipAddress}
+              ${verifyPoolParams.hostedMiner.friendlyMinerId}`,
+        });
       }
+      return POOL_STATUS_HEALTHY_MSG;
     });
   };
 }
@@ -216,19 +219,7 @@ export async function verifyAntminerPool(
     .then(verifyMinerIsForClient(params))
     .then(getMinerConfig(params))
     .then(verifyLivePoolStatus(params))
-    .then(() => POOL_STATUS_HEALTHY_MSG)
-    .catch((e) => {
-      const error = `${POOL_VERIFICATION_FAILURE_PREFIX} 
-        Failed to verify the mining pool for an Antminer: ${JSON.stringify(
-          params
-        )}.
-        Error msg: ${e}.`;
-
-      return Promise.reject({
-        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: error,
-      });
-    });
+    .then(() => POOL_STATUS_HEALTHY_MSG);
 }
 
 export async function verifyAntminerHashRate(
