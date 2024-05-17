@@ -1,4 +1,5 @@
-import { HostedMinerHydrated } from "wemine-apis";
+import { HostedMiner, HostedMinerHydrated } from "wemine-apis";
+export declare function isReachable(hostedMiner: HostedMinerHydrated | HostedMiner): Promise<import("axios").AxiosResponse<any, any>>;
 export declare function isHashRateWithinBounds(params: {
     hostedMiner: HostedMinerHydrated;
     actualHashRate: number;
