@@ -6,6 +6,7 @@ import {
 } from "./common-types";
 import { HostedMinerHydrated, MinerErrorType, Pool } from "wemine-apis";
 import {
+  getUnfulfilledCommandError,
   isFanSpeedWithinBounds,
   isHashRateWithinBounds,
   isOutletTempWithinBounds,
@@ -286,40 +287,46 @@ export async function verifyGoldshellHashRate(
     method: "get",
     url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
     headers: getRequestHeaders(authToken),
-  }).then((res) => {
-    const chipStats = res.data["data"];
-    const chipHashRates = chipStats.map(
-      (chipStat: any) => chipStat["hashrate"]
-    );
-    const actualHashRate = chipHashRates.reduce(
-      (partialSum: number, a: number) => partialSum + a,
-      0
-    );
-    if (
-      !isHashRateWithinBounds({
-        hostedMiner: hostedMiner,
-        actualHashRate,
-      })
-    ) {
-      const miner = hostedMiner.miner;
-      assertMiner(miner);
+  })
+    .then((res) => {
+      const chipStats = res.data["data"];
+      const chipHashRates = chipStats.map(
+        (chipStat: any) => chipStat["hashrate"]
+      );
+      const actualHashRate = chipHashRates.reduce(
+        (partialSum: number, a: number) => partialSum + a,
+        0
+      );
+      if (
+        !isHashRateWithinBounds({
+          hostedMiner: hostedMiner,
+          actualHashRate,
+        })
+      ) {
+        const miner = hostedMiner.miner;
+        assertMiner(miner);
 
-      const expectedHashRateRange =
-        miner.operationDetails.expectedHashRateRange;
+        const expectedHashRateRange =
+          miner.operationDetails.expectedHashRateRange;
 
-      return Promise.reject({
-        minerErrorType: MinerErrorType.HASH_RATE_ERROR,
-        stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX} 
+        return Promise.reject({
+          minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+          stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX} 
           HashRate not within the expected bounds: 
             miner --> ${hostedMiner}
             expectedHashRate --> ${expectedHashRateRange}
             actualHashRate -> ${actualHashRate}.
             Please check miner: ${JSON.stringify(ipAddress)}`,
-      });
-    }
+        });
+      }
 
-    return MINER_HASHRATE_HEALTHY_MSG;
-  });
+      return MINER_HASHRATE_HEALTHY_MSG;
+    })
+    .catch(() => {
+      return Promise.reject(
+        getUnfulfilledCommandError(MinerErrorType.HASH_RATE_ERROR)
+      );
+    });
 }
 
 export async function verifyGoldshellFanSpeed(
@@ -331,33 +338,39 @@ export async function verifyGoldshellFanSpeed(
     method: "get",
     url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
     headers: getRequestHeaders(authToken),
-  }).then((res) => {
-    const chipStats = res.data["data"];
-    const minerFanSpeeds = chipStats.flatMap((chipStat: any) =>
-      parseInt(chipStat["fanspeed"].match(NUMBERS_ONLY_REGEX))
-    );
-    const malfunctioningFans = minerFanSpeeds.filter((fanSpeed: number) => {
-      return !isFanSpeedWithinBounds({
-        hostedMiner: hostedMiner,
-        actualFanSpeed: fanSpeed,
+  })
+    .then((res) => {
+      const chipStats = res.data["data"];
+      const minerFanSpeeds = chipStats.flatMap((chipStat: any) =>
+        parseInt(chipStat["fanspeed"].match(NUMBERS_ONLY_REGEX))
+      );
+      const malfunctioningFans = minerFanSpeeds.filter((fanSpeed: number) => {
+        return !isFanSpeedWithinBounds({
+          hostedMiner: hostedMiner,
+          actualFanSpeed: fanSpeed,
+        });
       });
-    });
 
-    if (malfunctioningFans.length > 0) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
-        stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
+      if (malfunctioningFans.length > 0) {
+        return Promise.reject({
+          minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
+          stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
           Fan speeds are concerning and not within the expected bounds: 
             expectedFansSpeeds for miner - ${JSON.stringify(
               hostedMiner.miner.operationDetails.expectedFanSpeedRange
             )}
             malfunctioning fan speeds: ${malfunctioningFans}. 
             Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
-      });
-    }
+        });
+      }
 
-    return MINER_FAN_SPEED_HEALTHY_MSG;
-  });
+      return MINER_FAN_SPEED_HEALTHY_MSG;
+    })
+    .catch(() => {
+      return Promise.reject(
+        getUnfulfilledCommandError(MinerErrorType.FAN_SPEED_ERROR)
+      );
+    });
 }
 
 export async function verifyGoldshellTemperature(
@@ -369,21 +382,22 @@ export async function verifyGoldshellTemperature(
     method: "get",
     url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
     headers: getRequestHeaders(authToken),
-  }).then((res) => {
-    const chipStats = res.data["data"];
-    const chipTemps = chipStats.map((chipStats: any) =>
-      parseInt(chipStats["temp"].match(NUMBERS_ONLY_REGEX))
-    );
-    const tempMalfunctioningChips = chipTemps.filter((chipTemp: number) => {
-      return !isOutletTempWithinBounds({
-        hostedMiner: hostedMiner,
-        actualTemperature: chipTemp,
+  })
+    .then((res) => {
+      const chipStats = res.data["data"];
+      const chipTemps = chipStats.map((chipStats: any) =>
+        parseInt(chipStats["temp"].match(NUMBERS_ONLY_REGEX))
+      );
+      const tempMalfunctioningChips = chipTemps.filter((chipTemp: number) => {
+        return !isOutletTempWithinBounds({
+          hostedMiner: hostedMiner,
+          actualTemperature: chipTemp,
+        });
       });
-    });
-    if (tempMalfunctioningChips.length > 0) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
-        stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
+      if (tempMalfunctioningChips.length > 0) {
+        return Promise.reject({
+          minerErrorType: MinerErrorType.POOL_STATUS_ERROR,
+          stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
           Temperatures are concerning and not within the expected bounds: 
             expectedInletTemp for miner - ${JSON.stringify(
               hostedMiner.miner.operationDetails.expectedInletTempRange
@@ -395,11 +409,16 @@ export async function verifyGoldshellTemperature(
               tempMalfunctioningChips
             )}.  
             Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
-      });
-    }
+        });
+      }
 
-    return MINER_TEMPERATURE_HEALTHY_MSG;
-  });
+      return MINER_TEMPERATURE_HEALTHY_MSG;
+    })
+    .catch(() => {
+      return Promise.reject(
+        getUnfulfilledCommandError(MinerErrorType.TEMPERATURE_ERROR)
+      );
+    });
 }
 
 function getRequestHeaders(authToken: string) {

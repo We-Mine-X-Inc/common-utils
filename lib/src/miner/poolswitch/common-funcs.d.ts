@@ -1,4 +1,8 @@
-import { HostedMinerHydrated } from "wemine-apis";
+import { HostedMinerHydrated, MinerErrorType } from "wemine-apis";
+export declare function getUnfulfilledCommandError(relatedMinerErrorType: MinerErrorType): {
+    minerErrorType: MinerErrorType;
+    stackTrace: string;
+};
 export declare function isHashRateWithinBounds(params: {
     hostedMiner: HostedMinerHydrated;
     actualHashRate: number;

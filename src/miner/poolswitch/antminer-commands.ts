@@ -7,6 +7,7 @@ import {
 import { HostedMinerHydrated, MinerErrorType, Pool } from "wemine-apis";
 
 import {
+  getUnfulfilledCommandError,
   isFanSpeedWithinBounds,
   isHashRateWithinBounds,
   isInletTempWithinBounds,
@@ -261,27 +262,28 @@ export async function verifyAntminerHashRate(
     headers: { Accept: "application/json" },
     method: "GET",
     url: `http://${hostedMiner.ipAddress}/cgi-bin/stats.cgi`,
-  }).then((res) => {
-    const minerStats = res.data["STATS"][0];
-    if (
-      !(
-        isHashRateWithinBounds({
-          hostedMiner: hostedMiner,
-          actualHashRate: minerStats["rate_5s"],
-        }) &&
-        isHashRateWithinBounds({
-          hostedMiner: hostedMiner,
-          actualHashRate: minerStats["rate_30m"],
-        }) &&
-        isHashRateWithinBounds({
-          hostedMiner: hostedMiner,
-          actualHashRate: minerStats["rate_avg"],
-        })
-      )
-    ) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.HASH_RATE_ERROR,
-        stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX}
+  })
+    .then((res) => {
+      const minerStats = res.data["STATS"][0];
+      if (
+        !(
+          isHashRateWithinBounds({
+            hostedMiner: hostedMiner,
+            actualHashRate: minerStats["rate_5s"],
+          }) &&
+          isHashRateWithinBounds({
+            hostedMiner: hostedMiner,
+            actualHashRate: minerStats["rate_30m"],
+          }) &&
+          isHashRateWithinBounds({
+            hostedMiner: hostedMiner,
+            actualHashRate: minerStats["rate_avg"],
+          })
+        )
+      ) {
+        return Promise.reject({
+          minerErrorType: MinerErrorType.HASH_RATE_ERROR,
+          stackTrace: `${MINER_HASHRATE_FAILURE_PREFIX}
       HashRate not within the expected bounds: 
         expectedHashRate for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedHashRateRange
@@ -290,11 +292,16 @@ export async function verifyAntminerHashRate(
         rate_30m actualHashRate - ${minerStats["rate_30m"]}
         rate_avg actualHashRate - ${minerStats["rate_avg"]}.
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
-      });
-    }
+        });
+      }
 
-    return MINER_HASHRATE_HEALTHY_MSG;
-  });
+      return MINER_HASHRATE_HEALTHY_MSG;
+    })
+    .catch(() => {
+      return Promise.reject(
+        getUnfulfilledCommandError(MinerErrorType.HASH_RATE_ERROR)
+      );
+    });
 }
 
 export async function verifyAntminerFanSpeed(
@@ -304,29 +311,35 @@ export async function verifyAntminerFanSpeed(
     headers: { Accept: "application/json" },
     method: "GET",
     url: `http://${hostedMiner.ipAddress}/cgi-bin/stats.cgi`,
-  }).then((res) => {
-    const minerFanSpeeds: AntminerFanInfo = res.data["STATS"][0];
-    const malfunctioningFans = minerFanSpeeds.fan.filter((fanSpeed) => {
-      return !isFanSpeedWithinBounds({
-        hostedMiner: hostedMiner,
-        actualFanSpeed: fanSpeed,
+  })
+    .then((res) => {
+      const minerFanSpeeds: AntminerFanInfo = res.data["STATS"][0];
+      const malfunctioningFans = minerFanSpeeds.fan.filter((fanSpeed) => {
+        return !isFanSpeedWithinBounds({
+          hostedMiner: hostedMiner,
+          actualFanSpeed: fanSpeed,
+        });
       });
-    });
-    if (malfunctioningFans.length > 0) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
-        stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
+      if (malfunctioningFans.length > 0) {
+        return Promise.reject({
+          minerErrorType: MinerErrorType.FAN_SPEED_ERROR,
+          stackTrace: `${MINER_FAN_SPEED_FAILURE_PREFIX}
       Fan speeds are concerning and not within the expected bounds: 
         expectedFansSpeeds for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedFanSpeedRange
         )}
         malfunctioning fan speeds: ${malfunctioningFans}. 
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
-      });
-    }
+        });
+      }
 
-    return MINER_FAN_SPEED_HEALTHY_MSG;
-  });
+      return MINER_FAN_SPEED_HEALTHY_MSG;
+    })
+    .catch(() => {
+      return Promise.reject(
+        getUnfulfilledCommandError(MinerErrorType.FAN_SPEED_ERROR)
+      );
+    });
 }
 
 export async function verifyAntminerTemperature(
@@ -336,33 +349,35 @@ export async function verifyAntminerTemperature(
     headers: { Accept: "application/json" },
     method: "GET",
     url: `http://${hostedMiner.ipAddress}/cgi-bin/stats.cgi`,
-  }).then((res) => {
-    const minerChains: Array<AntminerChainInfo> = res.data["STATS"][0]["chain"];
-    const tempMalfunctioningChips = minerChains.filter((chainStats) => {
-      const [inlet1, inlet2, outlet1, outlet2] = chainStats.temp_pcb;
-      return !(
-        isInletTempWithinBounds({
-          hostedMiner: hostedMiner,
-          actualTemperature: inlet1,
-        }) &&
-        isInletTempWithinBounds({
-          hostedMiner: hostedMiner,
-          actualTemperature: inlet2,
-        }) &&
-        isOutletTempWithinBounds({
-          hostedMiner: hostedMiner,
-          actualTemperature: outlet1,
-        }) &&
-        isOutletTempWithinBounds({
-          hostedMiner: hostedMiner,
-          actualTemperature: outlet2,
-        })
-      );
-    });
-    if (tempMalfunctioningChips.length > 0) {
-      return Promise.reject({
-        minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
-        stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
+  })
+    .then((res) => {
+      const minerChains: Array<AntminerChainInfo> =
+        res.data["STATS"][0]["chain"];
+      const tempMalfunctioningChips = minerChains.filter((chainStats) => {
+        const [inlet1, inlet2, outlet1, outlet2] = chainStats.temp_pcb;
+        return !(
+          isInletTempWithinBounds({
+            hostedMiner: hostedMiner,
+            actualTemperature: inlet1,
+          }) &&
+          isInletTempWithinBounds({
+            hostedMiner: hostedMiner,
+            actualTemperature: inlet2,
+          }) &&
+          isOutletTempWithinBounds({
+            hostedMiner: hostedMiner,
+            actualTemperature: outlet1,
+          }) &&
+          isOutletTempWithinBounds({
+            hostedMiner: hostedMiner,
+            actualTemperature: outlet2,
+          })
+        );
+      });
+      if (tempMalfunctioningChips.length > 0) {
+        return Promise.reject({
+          minerErrorType: MinerErrorType.TEMPERATURE_ERROR,
+          stackTrace: `${MINER_TEMPERATURE_FAILURE_PREFIX}
       Temperatures are concerning and not within the expected bounds: 
         expectedInletTemp for miner - ${JSON.stringify(
           hostedMiner.miner.operationDetails.expectedInletTempRange
@@ -374,9 +389,14 @@ export async function verifyAntminerTemperature(
           tempMalfunctioningChips
         )}. 
         Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
-      });
-    }
+        });
+      }
 
-    return MINER_TEMPERATURE_HEALTHY_MSG;
-  });
+      return MINER_TEMPERATURE_HEALTHY_MSG;
+    })
+    .catch(() => {
+      return Promise.reject(
+        getUnfulfilledCommandError(MinerErrorType.TEMPERATURE_ERROR)
+      );
+    });
 }
