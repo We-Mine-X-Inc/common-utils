@@ -169,12 +169,14 @@ function addPool(switchPoolParams: SwitchPoolParams) {
 }
 
 export async function rebootGoldshellMiner(params: SwitchPoolParams) {
-  const sessionInfo = await loginToMiner(params.hostedMiner.ipAddress);
-  return await axios({
-    method: "get",
-    url: `http://${sessionInfo.ipAddress}/mcb/restart`,
-    headers: getRequestHeaders(sessionInfo.authToken),
-  });
+  return await loginToMiner(params.hostedMiner.ipAddress).then(
+    async ({ ipAddress, authToken }) =>
+      await axios({
+        method: "get",
+        url: `http://${ipAddress}/mcb/restart`,
+        headers: getRequestHeaders(authToken),
+      })
+  );
 }
 
 function buildNewPool(
@@ -281,13 +283,15 @@ function verifyLivePoolStatus(
 export async function verifyGoldshellHashRate(
   hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
-  const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
-
-  return await axios({
-    method: "get",
-    url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
-    headers: getRequestHeaders(authToken),
-  })
+  return await loginToMiner(hostedMiner.ipAddress)
+    .then(
+      async ({ ipAddress, authToken }) =>
+        await axios({
+          method: "get",
+          url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
+          headers: getRequestHeaders(authToken),
+        })
+    )
     .then((res) => {
       const chipStats = res.data["data"];
       const chipHashRates = chipStats.map(
@@ -316,7 +320,7 @@ export async function verifyGoldshellHashRate(
             miner --> ${hostedMiner}
             expectedHashRate --> ${expectedHashRateRange}
             actualHashRate -> ${actualHashRate}.
-            Please check miner: ${JSON.stringify(ipAddress)}`,
+            Please check miner: ${JSON.stringify(hostedMiner.ipAddress)}`,
         });
       }
 
@@ -332,13 +336,15 @@ export async function verifyGoldshellHashRate(
 export async function verifyGoldshellFanSpeed(
   hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
-  const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
-
-  return await axios({
-    method: "get",
-    url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
-    headers: getRequestHeaders(authToken),
-  })
+  return await loginToMiner(hostedMiner.ipAddress)
+    .then(
+      async ({ ipAddress, authToken }) =>
+        await axios({
+          method: "get",
+          url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
+          headers: getRequestHeaders(authToken),
+        })
+    )
     .then((res) => {
       const chipStats = res.data["data"];
       const minerFanSpeeds = chipStats.flatMap((chipStat: any) =>
@@ -376,13 +382,14 @@ export async function verifyGoldshellFanSpeed(
 export async function verifyGoldshellTemperature(
   hostedMiner: HostedMinerHydrated
 ): Promise<MinerCommandResolution> {
-  const { ipAddress, authToken } = await loginToMiner(hostedMiner.ipAddress);
-
-  return await axios({
-    method: "get",
-    url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
-    headers: getRequestHeaders(authToken),
-  })
+  return await loginToMiner(hostedMiner.ipAddress)
+    .then(({ ipAddress, authToken }) =>
+      axios({
+        method: "get",
+        url: `http://${ipAddress}/mcb/cgminer?cgminercmd=devs`,
+        headers: getRequestHeaders(authToken),
+      })
+    )
     .then((res) => {
       const chipStats = res.data["data"];
       const chipTemps = chipStats.map((chipStats: any) =>
