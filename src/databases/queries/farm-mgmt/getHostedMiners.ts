@@ -34,6 +34,7 @@ export function getHostedMiners({
         poolIsBeingSwitched
         isFarmManaged
         operatingError
+        operatingErrors
       }
       miner {
         marketDetails {

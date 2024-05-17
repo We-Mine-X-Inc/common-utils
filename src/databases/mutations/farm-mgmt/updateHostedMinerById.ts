@@ -40,6 +40,7 @@ export function updateHostedMinerById({
         poolIsBeingSwitched
         isFarmManaged
         operatingError
+        operatingErrors
       }
     }
   }
