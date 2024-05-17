@@ -1,5 +1,6 @@
 import { HostedMinerHydrated, MinerApiType } from "wemine-apis";
 import {
+  isAntminerReachable,
   rebootAntminerMiner,
   switchAntminerPool,
   verifyAntminerFanSpeed,
@@ -13,6 +14,7 @@ import {
   VerifyOperationsParams,
 } from "./common-types";
 import {
+  isGoldshellReachable,
   rebootGoldshellMiner,
   switchGoldshellPool,
   verifyGoldshellFanSpeed,
@@ -22,6 +24,7 @@ import {
 } from "./goldshell-commands";
 import { format as prettyFormat } from "pretty-format";
 import {
+  isBraiinsReachable,
   rebootBraiinsMiner,
   switchBraiinsPool,
   verifyBraiinsFanSpeed,
@@ -29,6 +32,16 @@ import {
   verifyBraiinsPool,
   verifyBraiinsTemperature,
 } from "./braiins-commands";
+
+export const IS_REACHABLE_FUNCTION: Record<
+  MinerApiType,
+  (ipAddress: string) => Promise<MinerCommandResolution>
+> = {
+  [MinerApiType.UNKNOWN]: isUknownMinerReachable,
+  [MinerApiType.ANTMINER]: isAntminerReachable,
+  [MinerApiType.BRAIINS]: isBraiinsReachable,
+  [MinerApiType.GOLDSHELL]: isGoldshellReachable,
+};
 
 export const POOL_SWITCH_FUNCTION: Record<
   MinerApiType,
@@ -89,6 +102,10 @@ export const TEMPERATURE_VERIFICATION_FUNCTION: Record<
   [MinerApiType.BRAIINS]: verifyBraiinsTemperature,
   [MinerApiType.GOLDSHELL]: verifyGoldshellTemperature,
 };
+
+async function isUknownMinerReachable(ipAddress: string) {
+  throw Error(`Invalid Miner API supplied. Params: ${ipAddress}`);
+}
 
 async function switchUnknownPool(
   params: SwitchPoolParams

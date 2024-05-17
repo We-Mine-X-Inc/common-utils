@@ -1,5 +1,6 @@
 import { HostedMinerHydrated, MinerApiType } from "wemine-apis";
 import { MinerCommandResolution, SwitchPoolParams, VerifyOperationsParams } from "./common-types";
+export declare const IS_REACHABLE_FUNCTION: Record<MinerApiType, (ipAddress: string) => Promise<MinerCommandResolution>>;
 export declare const POOL_SWITCH_FUNCTION: Record<MinerApiType, (p: SwitchPoolParams) => Promise<MinerCommandResolution>>;
 export declare const POOL_VERIFICATION_FUNCTION: Record<MinerApiType, (p: VerifyOperationsParams) => Promise<MinerCommandResolution>>;
 export declare const REBOOT_MINER_FUNCTION: Record<MinerApiType, (p: SwitchPoolParams) => Promise<MinerCommandResolution>>;

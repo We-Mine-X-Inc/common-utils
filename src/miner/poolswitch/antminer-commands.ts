@@ -17,6 +17,7 @@ import {
   MINER_FAN_SPEED_HEALTHY_MSG,
   MINER_HASHRATE_FAILURE_PREFIX,
   MINER_HASHRATE_HEALTHY_MSG,
+  MINER_ONLINE_HEALTHY_MSG,
   MINER_TEMPERATURE_FAILURE_PREFIX,
   MINER_TEMPERATURE_HEALTHY_MSG,
   POOL_STATUS_HEALTHY_MSG,
@@ -67,6 +68,28 @@ type AntminerChainInfo = {
 type AntminerFanInfo = {
   fan: Array<number>;
 };
+
+export async function isAntminerReachable(
+  ipAddress: string
+): Promise<MinerCommandResolution> {
+  return await ANTMINER_DIGESTAUTH.request({
+    headers: { Accept: "text/html; charset=utf-8; application/json" },
+    method: "GET",
+    url: `http://${ipAddress}/`,
+  })
+    .then(() => {
+      return MINER_ONLINE_HEALTHY_MSG;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        minerErrorType: MinerErrorType.OFFLINE_ERROR,
+        stackTrace: `
+        Miner is unreachable.
+        Please check miner: ${JSON.stringify(ipAddress)}.
+        ${error}`,
+      });
+    });
+}
 
 async function getSytemInfo(ipAddress: string): Promise<PoolValidationInfo> {
   return await ANTMINER_DIGESTAUTH.request({

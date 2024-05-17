@@ -16,6 +16,7 @@ import {
   MINER_FAN_SPEED_HEALTHY_MSG,
   MINER_HASHRATE_FAILURE_PREFIX,
   MINER_HASHRATE_HEALTHY_MSG,
+  MINER_ONLINE_HEALTHY_MSG,
   MINER_TEMPERATURE_FAILURE_PREFIX,
   MINER_TEMPERATURE_HEALTHY_MSG,
   POOL_STATUS_HEALTHY_MSG,
@@ -58,6 +59,27 @@ type ApplyPoolSwitchInfo = {
   sessionInfo: SessionInfo;
   pools: GoldshellMinerPoolInfo[];
 };
+
+export async function isGoldshellReachable(
+  ipAddress: string
+): Promise<MinerCommandResolution> {
+  return await axios({
+    method: "get",
+    url: `http://${ipAddress}/user/login?username=${GOLDSHELL_DEFAULTS.MINER_USERNAME}&password=${GOLDSHELL_DEFAULTS.MINER_PWD}`,
+  })
+    .then((res: any) => {
+      return MINER_ONLINE_HEALTHY_MSG;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        minerErrorType: MinerErrorType.OFFLINE_ERROR,
+        stackTrace: `
+        Miner is unreachable.
+        Please check miner: ${JSON.stringify(ipAddress)}.
+        ${error}`,
+      });
+    });
+}
 
 async function loginToMiner(ipAddress: string): Promise<SessionInfo> {
   return await axios({

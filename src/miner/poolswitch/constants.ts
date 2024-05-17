@@ -15,3 +15,5 @@ export const MINER_HASHRATE_HEALTHY_MSG = "Healthy Hashrate";
 export const MINER_FAN_SPEED_HEALTHY_MSG = "Healthy Fan Speed";
 
 export const MINER_TEMPERATURE_HEALTHY_MSG = "Healthy Temperatures";
+
+export const MINER_ONLINE_HEALTHY_MSG = "Miner is Reachable";

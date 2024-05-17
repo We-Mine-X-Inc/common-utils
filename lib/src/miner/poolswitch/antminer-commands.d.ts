@@ -1,5 +1,6 @@
 import { MinerCommandResolution, SwitchPoolParams, VerifyOperationsParams } from "./common-types";
 import { HostedMinerHydrated } from "wemine-apis";
+export declare function isAntminerReachable(ipAddress: string): Promise<MinerCommandResolution>;
 export declare function rebootAntminerMiner(params: SwitchPoolParams): Promise<void>;
 export declare function switchAntminerPool(params: SwitchPoolParams): Promise<MinerCommandResolution>;
 export declare function verifyAntminerPool(params: VerifyOperationsParams): Promise<MinerCommandResolution>;

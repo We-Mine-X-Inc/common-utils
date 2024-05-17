@@ -15,6 +15,7 @@ import {
   MINER_FAN_SPEED_HEALTHY_MSG,
   MINER_HASHRATE_FAILURE_PREFIX,
   MINER_HASHRATE_HEALTHY_MSG,
+  MINER_ONLINE_HEALTHY_MSG,
   MINER_TEMPERATURE_FAILURE_PREFIX,
   MINER_TEMPERATURE_HEALTHY_MSG,
   POOL_STATUS_HEALTHY_MSG,
@@ -29,6 +30,28 @@ const SUMMARY_FIELD = "SUMMARY";
 const MEGA_HASH_WITHIN_5_SECS = "MHS 5s";
 const MEGA_HASH_WITHIN_15_MINS = "MHS 15m";
 const MEGA_HASH_AVG = "MHS av";
+
+export async function isBraiinsReachable(
+  ipAddress: string
+): Promise<MinerCommandResolution> {
+  return new Promise((resolve, reject) => {
+    const minerIP = ipAddress;
+    const getSummaryCommand = `echo '{"command":"summary"}' | nc ${minerIP} 4028 | jq .`;
+    exec(getSummaryCommand, (error: any, stdout: any, stderr: any) => {
+      const parsedStats = jsonSafeParse(stdout)[SUMMARY_FIELD];
+      if (!parsedStats) {
+        reject({
+          minerErrorType: MinerErrorType.OFFLINE_ERROR,
+          stackTrace: `
+          Miner is unreachable.
+          Please check miner: ${JSON.stringify(ipAddress)}`,
+        });
+        return;
+      }
+      resolve(MINER_ONLINE_HEALTHY_MSG);
+    });
+  });
+}
 
 export async function verifyBraiinsHashRate(
   hostedMiner: HostedMinerHydrated

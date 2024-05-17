@@ -1,5 +1,6 @@
 import { HostedMinerHydrated } from "wemine-apis";
 import { MinerCommandResolution, SwitchPoolParams, VerifyOperationsParams } from "./common-types";
+export declare function isBraiinsReachable(ipAddress: string): Promise<MinerCommandResolution>;
 export declare function verifyBraiinsHashRate(hostedMiner: HostedMinerHydrated): Promise<MinerCommandResolution>;
 export declare function verifyBraiinsFanSpeed(hostedMiner: HostedMinerHydrated): Promise<MinerCommandResolution>;
 export declare function verifyBraiinsTemperature(hostedMiner: HostedMinerHydrated): Promise<MinerCommandResolution>;

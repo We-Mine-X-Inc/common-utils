@@ -7,4 +7,5 @@ export declare const POOL_STATUS_HEALTHY_MSG = "Healthy Pool Status";
 export declare const MINER_HASHRATE_HEALTHY_MSG = "Healthy Hashrate";
 export declare const MINER_FAN_SPEED_HEALTHY_MSG = "Healthy Fan Speed";
 export declare const MINER_TEMPERATURE_HEALTHY_MSG = "Healthy Temperatures";
+export declare const MINER_ONLINE_HEALTHY_MSG = "Miner is Reachable";
 //# sourceMappingURL=constants.d.ts.map
