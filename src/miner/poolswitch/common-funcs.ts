@@ -1,17 +1,4 @@
-import axios from "axios";
-import { HostedMiner, HostedMinerHydrated, assertMiner } from "wemine-apis";
-
-export async function isReachable(
-  hostedMiner: HostedMinerHydrated | HostedMiner
-) {
-  return await axios(`http://${hostedMiner.ipAddress}`, {
-    method: "get",
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      Accept: "text/html; charset=utf-8; application/json",
-    },
-  });
-}
+import { HostedMinerHydrated, assertMiner } from "wemine-apis";
 
 export function isHashRateWithinBounds(params: {
   hostedMiner: HostedMinerHydrated;
