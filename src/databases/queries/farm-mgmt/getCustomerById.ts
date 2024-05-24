@@ -16,7 +16,17 @@ export function getCustomerById({
   return gql`
   query GetCustomerById($customerId: ObjectId) {
     ${schemaName}(query: ${compatibleQuery}) {
-      notificationPreferences
+      notificationPreferences {
+        minerStatusChangeNotifPreference: {
+          shouldReceiveEmail
+        }
+        poolChangeNotifPreference: {
+          shouldReceiveEmail
+        }
+        remainingTimeNotifPreference: {
+          shouldReceiveEmail
+        }
+      }
     }
   }
 `;
