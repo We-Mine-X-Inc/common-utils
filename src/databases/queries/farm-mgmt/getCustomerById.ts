@@ -17,13 +17,13 @@ export function getCustomerById({
   query GetCustomerById($customerId: ObjectId) {
     ${schemaName}(query: ${compatibleQuery}) {
       notificationPreferences {
-        minerStatusChangeNotifPreference: {
+        minerStatusChangeNotifPreference {
           shouldReceiveEmail
         }
-        poolChangeNotifPreference: {
+        poolChangeNotifPreference {
           shouldReceiveEmail
         }
-        remainingTimeNotifPreference: {
+        remainingTimeNotifPreference {
           shouldReceiveEmail
         }
       }

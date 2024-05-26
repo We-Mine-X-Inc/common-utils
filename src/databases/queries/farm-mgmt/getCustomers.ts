@@ -25,13 +25,13 @@ export function getCustomers({
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_CUSTOMER_IDS}) {
       _id
       notificationPreferences {
-        minerStatusChangeNotifPreference: {
+        minerStatusChangeNotifPreference {
           shouldReceiveEmail
         }
-        poolChangeNotifPreference: {
+        poolChangeNotifPreference {
           shouldReceiveEmail
         }
-        remainingTimeNotifPreference: {
+        remainingTimeNotifPreference {
           shouldReceiveEmail
         }
       }

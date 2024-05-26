@@ -30,13 +30,13 @@ export function updateCustomerById({
   mutation {
     ${schemaName}(query: ${compatibleQuery}, set: ${compatibleMutation}) {
         notificationPreferences {
-          minerStatusChangeNotifPreference: {
+          minerStatusChangeNotifPreference {
             shouldReceiveEmail
           }
-          poolChangeNotifPreference: {
+          poolChangeNotifPreference {
             shouldReceiveEmail
           }
-          remainingTimeNotifPreference: {
+          remainingTimeNotifPreference {
             shouldReceiveEmail
           }
         }
