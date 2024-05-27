@@ -13,6 +13,7 @@ type SchemaOptions = {
 };
 export declare function getHostingContractGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getCustomerGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
+export declare function getDashboardCustomerGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getHostedMinerGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getPoolGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;
 export declare function getMiningWorkGraphSchemaName(env: Environment, schemaOptions?: SchemaOptions): string;

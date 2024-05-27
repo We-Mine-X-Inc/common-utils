@@ -1,21 +1,21 @@
 import { gql } from "@apollo/client/core";
 import {
   OperationType,
-  getCustomerGraphSchemaName,
+  getDashboardCustomerGraphSchemaName,
 } from "../../environment-tables";
 import { Environment } from "wemine-apis";
 import { makeGraphQLInputCompatible } from "../../json-manipulation";
 
 const MAX_NUM_OF_CUSTOMER_IDS = 100;
 
-export function getCustomers({
+export function getDashboardCustomers({
   env,
   query,
 }: {
   env: Environment;
   query: Omit<any, "_id">;
 }) {
-  const schemaName = getCustomerGraphSchemaName(env, {
+  const schemaName = getDashboardCustomerGraphSchemaName(env, {
     operationType: OperationType.FETCH,
     forManyDocuments: true,
   });
@@ -23,7 +23,18 @@ export function getCustomers({
   return gql`
   query {
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_CUSTOMER_IDS}) {
-      _id
+        _id
+        notificationPreferences {
+            minerStatusChangeNotifPreference {
+                shouldReceiveEmail
+            }
+            poolChangeNotifPreference {
+                shouldReceiveEmail
+            }
+            remainingTimeNotifPreference {
+                shouldReceiveEmail
+            }
+        }
     }
   }`;
 }

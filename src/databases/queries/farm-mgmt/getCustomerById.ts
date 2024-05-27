@@ -14,19 +14,9 @@ export function getCustomerById({
   const schemaName = getCustomerGraphSchemaName(env);
   const compatibleQuery = makeGraphQLInputCompatible(query);
   return gql`
-  query GetCustomerById($customerId: ObjectId) {
+  query {
     ${schemaName}(query: ${compatibleQuery}) {
-      notificationPreferences {
-        minerStatusChangeNotifPreference {
-          shouldReceiveEmail
-        }
-        poolChangeNotifPreference {
-          shouldReceiveEmail
-        }
-        remainingTimeNotifPreference {
-          shouldReceiveEmail
-        }
-      }
+      _id
     }
   }
 `;

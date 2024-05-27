@@ -29,17 +29,6 @@ export function updateCustomerById({
   return gql`
   mutation {
     ${schemaName}(query: ${compatibleQuery}, set: ${compatibleMutation}) {
-        notificationPreferences {
-          minerStatusChangeNotifPreference {
-            shouldReceiveEmail
-          }
-          poolChangeNotifPreference {
-            shouldReceiveEmail
-          }
-          remainingTimeNotifPreference {
-            shouldReceiveEmail
-          }
-        }
     }
   }
 `;

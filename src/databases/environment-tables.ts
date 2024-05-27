@@ -36,6 +36,17 @@ export function getCustomerGraphSchemaName(
   });
 }
 
+export function getDashboardCustomerGraphSchemaName(
+  env: Environment,
+  schemaOptions?: SchemaOptions
+) {
+  return getTableGraphSchemaName({
+    tableName: "dashboardcustomer",
+    env,
+    schemaOptions,
+  });
+}
+
 export function getHostedMinerGraphSchemaName(
   env: Environment,
   schemaOptions?: SchemaOptions

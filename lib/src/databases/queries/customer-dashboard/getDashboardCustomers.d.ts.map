@@ -1,0 +1,1 @@
+{"version":3,"file":"getDashboardCustomers.d.ts","sourceRoot":"","sources":["../../../../../src/databases/queries/customer-dashboard/getDashboardCustomers.ts"],"names":[],"mappings":"AAKA,OAAO,EAAE,WAAW,EAAE,MAAM,aAAa,CAAC;AAK1C,wBAAgB,qBAAqB,CAAC,EACpC,GAAG,EACH,KAAK,GACN,EAAE;IACD,GAAG,EAAE,WAAW,CAAC;IACjB,KAAK,EAAE,IAAI,CAAC,GAAG,EAAE,KAAK,CAAC,CAAC;CACzB,+CAuBA"}
