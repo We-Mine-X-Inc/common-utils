@@ -17,6 +17,15 @@ export function getDashboardCustomerById({
   query {
     ${schemaName}(query: ${compatibleQuery}) {
         _id
+        farmProfile {
+            _id
+            email
+            firstName
+            lastName
+            phoneNumber
+            address
+            isCompanyCustomer
+        }
         notificationPreferences {
             minerStatusChangeNotifPreference {
                 shouldReceiveEmail

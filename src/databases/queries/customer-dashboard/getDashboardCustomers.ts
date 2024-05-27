@@ -24,6 +24,15 @@ export function getDashboardCustomers({
   query {
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_CUSTOMER_IDS}) {
         _id
+        farmProfile {
+            _id
+            email
+            firstName
+            lastName
+            phoneNumber
+            address
+            isCompanyCustomer
+        }
         notificationPreferences {
             minerStatusChangeNotifPreference {
                 shouldReceiveEmail
@@ -35,6 +44,7 @@ export function getDashboardCustomers({
                 shouldReceiveEmail
             }
         }
+        hasSubmittedSignUpInfo
     }
   }`;
 }

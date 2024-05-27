@@ -24,6 +24,9 @@ export function getCustomers({
   query {
     ${schemaName}(query: ${compatibleQuery}, limit: ${MAX_NUM_OF_CUSTOMER_IDS}) {
       _id
+      email
+      firstName
+      lastName
     }
   }`;
 }
